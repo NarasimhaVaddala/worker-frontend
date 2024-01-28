@@ -1,0 +1,9 @@
+body{
+    background-color: rgb(26, 25, 25);
+    color: white;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

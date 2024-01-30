@@ -4,6 +4,8 @@ import {Link  , useLocation} from 'react-router-dom'
 export default function Header() {
     let loc = useLocation()
   return (
+    <>
+    
     <nav className="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
   <div className="container-fluid">
     <Link className="navbar-brand" to="/">Narasimha</Link>
@@ -24,5 +26,8 @@ export default function Header() {
     </div>
   </div>
 </nav>
+
+
+    </>
   )
 }

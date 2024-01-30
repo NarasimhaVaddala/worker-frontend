@@ -5,66 +5,128 @@ import Home from './components/Home'
 import WorkersList from './components/WorkersList'
 import Addworker from './components/Addworker'
 import Attendance from './components/Attendance'
+
 export default function App() {
 
-  useEffect(() => {
-    if (localStorage.getItem('workerlist')) {
-      const newlist = JSON.parse(localStorage.getItem("workerlist"))
-      setworker(newlist)
-    }
-  }, [])
 
   const [worker, setworker] = useState([])
+  const getWorkers = async () => {
 
-  const addWorker = (name, mobile, desig, rate) => {
+    const data = await fetch('http://localhost:3000/api/worker/fetchallworkers', {
+      headers: {
+        "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+        "Content-type": "application/json",
+      },
+      method: "GET",
 
-    let newworker = { name: name, mobile: mobile, designation: desig, rate: rate }
-    setworker([...worker, newworker])
-    localStorage.setItem('workerlist', JSON.stringify([...worker, newworker]))
-    console.log(worker);
+    })
 
-
+    const res = await data.json();
+    setworker(res.workerlist)
+    console.log(res.workerlist);
 
   }
 
-  const deleteWorker = (number) => {
+  useEffect(() => { getWorkers() }, [])
+
+
+  const addWorker = async (name, mobile, designation, rate) => {
+
+
+
+    const data = await fetch('http://localhost:3000/api/worker/addnewworker', {
+      headers: {
+        "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+        "Content-type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ name, mobile, designation, rate })
+
+    })
+
+    const res = await data.json();
+    setworker([...worker, res.worker])
+    console.log(res.worker);
+
+  }
+
+  const deleteWorker = async (id) => {
     let x = confirm("Are You Sure Want To Delete This Worker")
     if (x) {
-      let newlist = worker.filter((e) => {
-        return e.mobile !== number
+      let url = "http://localhost:3000/api/worker/deleteworker"
+      const data = await fetch(url, {
+        headers: {
+          "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+          "Content-type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify({ id: id })
+
       })
-      setworker(newlist)
-      localStorage.setItem('workerlist', JSON.stringify(newlist))
-      console.log(newlist);
+
+      const res = await data.json();
+      getWorkers()
     }
   }
 
 
-  const editWorker = (name, mobile, desig, rate) => {
-    let objIndex = worker.findIndex((obj => obj.mobile === mobile));
+  const editWorker = async (id, name, mobile, designation, rate) => {
+    if (name.length < 3) {
+      alert("Please Enter a Valid Name")
+    }
+    else if (mobile.length < 10 || mobile.length > 10) {
+      alert("please enter a valid mobile number")
+    }
+    else if(rate.length < 1){
+      alert("Please enter a valid rate")
+    }
+    else if (designation === null || designation === "") {
+      console.log(des);
+      alert("Please select Designation Of Worker")
+    }
+    else {
+      let url = "http://localhost:3000/api/worker/editworker"
+      const data = await fetch(url, {
+        headers: {
+          "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+          "Content-type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({ id, name, designation, mobile, rate })
 
-    worker[objIndex].name = name;
-    worker[objIndex].mobile = mobile;
-    worker[objIndex].designation = desig;
-    worker[objIndex].rate = rate;
+      })
 
-    setworker([...worker])
-    localStorage.setItem('workerlist', JSON.stringify(worker))
-    console.log(worker[objIndex].name);
+      const res = await data.json();
+      console.log(res);
+      getWorkers()
+
+      setworker([...worker])
+    }
+    }
+
+
+    const updateWorker = (updatedWorker) => {
+      const updatedWorkers = worker.map((worker) =>
+        worker._id === updatedWorker._id ? updatedWorker : worker
+      );
+      setworker(updatedWorkers);
+    };
+
+    return (
+      <>
+        <Header />
+
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/workers' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
+          <Route path='/addworker' element={<Addworker addWorker={addWorker} />} />
+          <Route path='/takeattendance' element={<Attendance worker={worker} updateWorker={updateWorker}/>} />
+
+          <Route path='/removeworker' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
+        </Routes>
+
+
+    
+      </>
+    )
   }
-
-
-  return (
-    <>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/workers' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
-        <Route path='/addworker' element={<Addworker addWorker={addWorker} />} />
-        <Route path='/takeattendance' element={<Attendance  worker={worker}/>} />
-        <Route path='/removeworker' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
-      </Routes>
-
-    </>
-  )
-}

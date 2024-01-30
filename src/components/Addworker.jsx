@@ -25,26 +25,10 @@ export default function Addworker(props) {
             setrate("")
 
         }
-
-        const data = await fetch('http://localhost:3000/api/worker/addnewworker', {
-            headers: {
-                "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
-                "Content-type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-                name: name, mobile: mob, designation: des, rate: rate ,
-            })
-        })
-
-        const res = await data.json();
-        console.log(res);
-
-
-    }
+}
     return (
         <>
-            <div className="container my-3 ">
+            <div className="container my-3 " data-bs-theme="dark">
 
                 <form className='mx-3'>
                     <div className="mb-3">

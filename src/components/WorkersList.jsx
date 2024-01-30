@@ -8,9 +8,13 @@ export default function WorkersList(props) {
     const [mob, setmob] = useState("")
     const [rate, setrate] = useState("")
     const [search, setsearch] = useState("")
+    const [id, setid] = useState("")
     console.log(search);
-    const handleEdit = (mobile, designation, rate, name) => {
+    const handleEdit = (mobile, designation, rate, name, id) => {
+
         ref.current.click()
+        
+        setid(id)
         setname(name)
         setmob(mobile)
         setdes(designation)
@@ -34,6 +38,8 @@ export default function WorkersList(props) {
                             <th scope="col">Mobile</th>
                             <th scope="col">Designation</th>
                             <th scope="col">Rate</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
                         </tr>
                     </thead>
                     <tbody >
@@ -41,13 +47,13 @@ export default function WorkersList(props) {
                             return search.toLowerCase() === '' ? e : e.name.toLowerCase().includes(search) || e.mobile.toLowerCase().includes(search) || e.designation.toLowerCase().includes(search)
                         }).map((e) => {
                             return (
-                                <tr key={e.mobile}>
+                                <tr key={e._id}>
                                     <td>{e.name}</td>
                                     <td>{e.mobile}</td>
                                     <td>{e.designation}</td>
                                     <td>{e.rate}</td>
-                                    <td><button className="btn btn-warning btn-sm" onClick={() => handleEdit(e.mobile, e.designation, e.rate, e.name)}>Edit Worker</button></td>
-                                    <td><button className="btn btn-danger btn-sm" onClick={() => props.delete(e.mobile)}>Delete Worker</button></td>
+                                    <td><button className="btn btn-warning btn-sm" onClick={() => handleEdit(e.mobile, e.designation, e.rate, e.name, e._id)}><i className="fa-regular fa-pen-to-square"></i></button></td>
+                                    <td><button className="btn btn-danger btn-sm" onClick={() => props.delete(e._id)}><i className="fa-solid fa-trash-can"></i></button></td>
                                 </tr>
                             )
                         })
@@ -96,7 +102,7 @@ export default function WorkersList(props) {
                                     </select>
                                 </div>
 
-                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => props.editWorker(name, mob, des, rate)}>Submit</button>
+                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => props.editWorker(id, name, mob, des, rate)}>Submit</button>
                             </form>
                         </div>
 

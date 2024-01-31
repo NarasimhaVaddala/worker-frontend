@@ -19,14 +19,10 @@ export default function Attendance(props) {
 
   const formattedToday = dd + '/' + mm + '/' + yyyy;
   const [att, setatt] = useState([])
-  useEffect(() => {
-    setatt(JSON.parse(localStorage.getItem('attendance')))
-  }, [])
+  const [dis , setdis] = useState(false)
   const takeAttendance = (id, time, advance) => {
-    setatt([...att, { id, time, advance }])
-    console.log(att);
-    localStorage.setItem('attendance', JSON.stringify(att))
-
+    setatt(att.concat({ id, time, advance }))
+   console.log(att);
   }
   return (
     <>
@@ -68,7 +64,7 @@ export default function Attendance(props) {
                     <td>{e.name}</td>
                     <td>{e.mobile}</td>
                     <td>
-                      <select value={time} onChange={(e) => settime(e.target.value)}>
+                      <select value={time} onChange={(e) => settime(e.target.value)} disabled={dis}>
                         <option value="0">Absent</option>
                         <option value="0.5">Half</option>
                         <option value="1">One</option>
@@ -76,9 +72,9 @@ export default function Attendance(props) {
                         <option value="2">Double</option>
                         <option value="2.5">Double + Half</option>
                       </select> </td>
-                    <td><input type="number" style={{ width: "70px" }} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
+                    <td><input type="number" disabled={true?att.filter((el)=>{return el._id})[0]===e._id:false} style={{ width: "70px" }} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
                     <td>
-                      <button className='btn btn-warning' type='button' onClick={() => takeAttendance(e._id, time, adv)}>Submit</button></td>
+                      <button className='btn btn-warning' disabled={dis} type='button' onClick={() => takeAttendance(e._id, time, adv)}>Submit</button></td>
                   </tr>
                 )
               })
@@ -91,6 +87,10 @@ export default function Attendance(props) {
 
 
       </div>
+
+
+
+    
     </>
   )
 }

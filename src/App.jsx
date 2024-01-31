@@ -4,12 +4,25 @@ import Header from './components/Header'
 import Home from './components/Home'
 import WorkersList from './components/WorkersList'
 import Addworker from './components/Addworker'
-import Attendance from './components/Attendance'
+
+import Att from './components/Att'
 
 export default function App() {
+  let date = ""
+  const setdate = ()=>{
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1;
+      let dd = today.getDate();
 
+      if (dd < 10) dd = '0' + dd;
+       if (mm < 10) mm = '0' + mm;
+       date = dd + '/' + mm + '/' + yyyy;
+  }
+  setdate()
 
   const [worker, setworker] = useState([])
+  
   const getWorkers = async () => {
 
     const data = await fetch('http://localhost:3000/api/worker/fetchallworkers', {
@@ -23,7 +36,8 @@ export default function App() {
 
     const res = await data.json();
     setworker(res.workerlist)
-    console.log(res.workerlist);
+
+    
 
   }
 
@@ -105,12 +119,25 @@ export default function App() {
     }
 
 
-    const updateWorker = (updatedWorker) => {
-      const updatedWorkers = worker.map((worker) =>
-        worker._id === updatedWorker._id ? updatedWorker : worker
-      );
-      setworker(updatedWorkers);
-    };
+   const takeattendance = async(id, time, adv)=>{
+    
+    let url = `http://localhost:3000/api/worker/takeattendance/${id}`
+    const data = await fetch(url, {
+        headers: {
+          "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+          "Content-type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({ time:parseFloat(time) , advance:parseFloat(adv) , date:date })
+
+      })
+
+      let res = await data.json()
+      console.log(res);
+      getWorkers()
+      setworker([...worker])
+
+   }
 
     return (
       <>
@@ -120,7 +147,8 @@ export default function App() {
           <Route path='/' element={<Home />} />
           <Route path='/workers' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
           <Route path='/addworker' element={<Addworker addWorker={addWorker} />} />
-          <Route path='/takeattendance' element={<Attendance worker={worker} updateWorker={updateWorker}/>} />
+          {/* <Route path='/takeattendance' element={<Attendance worker={worker} updateWorker={updateWorker}/>} /> */}
+          <Route path='/takeattendance/:id' element={<Att worker={worker}  takeattendance={ takeattendance}  />} />
 
           <Route path='/removeworker' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
         </Routes>

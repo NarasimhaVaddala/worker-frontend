@@ -41,7 +41,7 @@ export default function WorkersList(props) {
                             <th scope="col">Rate</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
-                            <th scope="col">Mark Attendance</th>
+                          
                           
                         </tr>
                     </thead>
@@ -57,7 +57,7 @@ export default function WorkersList(props) {
                                     <td>{e.rate}</td>
                                     <td><button className="btn btn-warning btn-sm" onClick={() => handleEdit(e.mobile, e.designation, e.rate, e.name, e._id)}><i className="fa-regular fa-pen-to-square"></i></button></td>
                                     <td><button className="btn btn-danger btn-sm" onClick={() => props.delete(e._id)}><i className="fa-solid fa-trash-can"></i></button></td>
-                                    <td><Link className="btn btn-dark btn-sm" to={`/takeAttendance/${e._id}`}><i className="fa-solid fa-arrow-right"></i></Link></td>
+                                   
                              </tr>
                             )
                         })

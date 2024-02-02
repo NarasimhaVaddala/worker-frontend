@@ -2,37 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 export default function Att(props) {
-    let date = ""
-    const setdate = () => {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        let mm = today.getMonth() + 1;
-        let dd = today.getDate();
-
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-        date = dd + '/' + mm + '/' + yyyy;
-    }
-    setdate()
+   
     let loc = useLocation()
     let id = loc.pathname.slice(16, loc.pathname.length).toLowerCase()
-  
-
     let name = ""
     let mobile = ""
-    let att = []
    
 
-    props.worker.filter((e) => {
+
+props.worker.filter((e) => {
         if (e._id === id) {
             name = e.name;
             mobile = e.mobile;
-           att = e.attendance
-           
-        }
-    })
+       
+}})
+
+
+
+useEffect(()=>{
+        props.getattendance(id)
+},[])
     
-   
+ 
 
     
     const [time, settime] = useState("")
@@ -42,11 +33,18 @@ export default function Att(props) {
         if (adv==null ||adv== "") {
             alert("please Enter Advance")
         }
+         if (time==null || time=="" || time==0){
+        time = 0
+      }
         props.takeattendance(id, time, adv)
+        props.getattendance(id)
+
+        settime("")
+        setadv("")
     }
     return (
         <div className="container my-3">
-            <h3 className='my-3'>Date : {date}</h3>
+            <h3 className='my-3'>Date : {props.date}</h3>
             <div className="d-flex align-items-center justify-content-between my-2 ">
 
                 <p>Half : 1/2</p>
@@ -103,8 +101,8 @@ export default function Att(props) {
                 </thead>
                 <tbody>{
 
-                    att.map((e) => {
-                        return (<tr key={e.date}>
+                    props.attendance.map((e) => {
+                        return (<tr key={e.advance}>
                             <td>{e.date}</td>
                             <td>{e.time}</td>
                             <td>{e.advance}</td>

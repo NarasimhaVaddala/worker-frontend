@@ -36,11 +36,18 @@ export default function Payment(props) {
         props.getattendance(id)
 
     }, [])
-
-
+    let pay = (time * rate) - adv
+    let workedamt = time*rate
 
     
-    let pay = (time * rate) - adv
+    const makePayment = ()=>{
+            let x = confirm("Are You sure want to make payment , This will erase all the attendance , advance , worktime of this worker , you can find the transaction in payment log once the payment is done successfully");
+
+            if (x) {
+                    props.setpaymentLog(name , id , mobile , pay , workedamt , adv , from , to)
+                    
+            }
+    }
 
     return (
         <>
@@ -109,7 +116,7 @@ export default function Payment(props) {
 
                     </table>
 
-                    <button type="button" disabled={!pay} className="btn btn-warning my-4" style={{ width: "150px", margin: "auto" }}>Make Payment</button>
+                    <button onClick={makePayment} type="button" disabled={!pay} className="btn btn-warning my-4" style={{ width: "150px", margin: "auto" }}>Make Payment</button>
                 </div>
 
             </div>

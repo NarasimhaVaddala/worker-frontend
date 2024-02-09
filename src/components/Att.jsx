@@ -17,8 +17,14 @@ props.worker.filter((e) => {
             mobile = e.mobile;
   }})
 
-props.attendance.forEach((e)=>{
+props.attendance.filter((e)=>{
     if(e.date===props.date){
+        disable = true
+    }
+})
+
+props.paymentlog.filter((e)=>{
+    if (e.id===id && e.todate==props.date) {
         disable = true
     }
 })
@@ -81,7 +87,7 @@ useEffect(()=>{
                         <td>{name}</td>
                         <td>{mobile}</td>
                         <td>
-                            <select value={time} onChange={(e) => settime(e.target.value)} >
+                            <select disabled={disable} value={time} onChange={(e) => settime(e.target.value)} >
                                 <option value="0">Absent</option>
                                 <option value="0.5">Half</option>
                                 <option value="1">One</option>
@@ -89,7 +95,7 @@ useEffect(()=>{
                                 <option value="2">Double</option>
                                 <option value="2.5">Double + Half</option>
                             </select> </td>
-                        <td><input type="number" style={{ width: "70px" }} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
+                        <td><input type="number" style={{ width: "70px" }} disabled={disable} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
                         <td>
                             <button className='btn btn-warning' type='button' disabled={disable} onClick={() => takeAttendance(id, time, adv)}>Submit</button></td>
                     </tr>

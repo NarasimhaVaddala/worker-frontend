@@ -1,14 +1,16 @@
 import React, { useState, useEffect, } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export default function Payment(props) {
 
-    let loc = useLocation()
-    let id = loc.pathname.slice(13, loc.pathname.length).toLowerCase()
+    let {id }= useParams()
     let name = ""
     let mobile = ""
     let rate = ""
-    
+    let from = ""
+    let to = ""
+    let time = 0
+    let adv = 0
 
     props.worker.filter((e) => {
         if (e._id === id) {
@@ -19,9 +21,17 @@ export default function Payment(props) {
         }
     })
 
-    let time = 0
-    let adv = 0
+    props.attendance.forEach((e) => {
+        time = time + e.time
+        adv = adv + e.advance
 
+    })
+    if (props.attendance.length > 0) {
+        from = props.attendance[0].date
+        to = props.attendance[props.attendance.length - 1].date
+    }
+
+   
     useEffect(() => {
         props.getattendance(id)
 
@@ -29,32 +39,79 @@ export default function Payment(props) {
 
 
 
-    props.attendance.forEach((e) => {
-        time = time + e.time
-        adv = adv + e.advance
-       
-    })
-
-    let from = props.attendance[0].date
-    let to = props.attendance[props.attendance.length - 1].date
-
-
+    
     let pay = (time * rate) - adv
 
     return (
         <>
 
-            <div className="container my-2  ">
-                <h3 className='my-2'>Payment Details</h3>
-                <div className="container my-2 mx-2">
-                    <p>Name : {name}</p>
-                    <p>Mobile : {mobile}</p>
-                    <p>Rate : {rate}</p>
-                    <p>Total Worked Time : {time}</p>
-                    <p>From {from} to {to}</p>
-                    <p>Total Advance : {adv}</p>
-                    <p>To Be Paid : {pay}</p>
+            <div className="container my-2 ">
+                <h3 className='my-2 text-center'>Payment Details</h3>
+                <hr />
+
+                <table className='table bg-dark' data-bs-theme="dark" >
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{name}</td>
+                            <td>{mobile}</td>
+                            <td>{rate}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div className="container d-flex flex-column">
+
+
+                    <table className="table  bg-dark" data-bs-theme="dark" style={{ width: "80%", margin: "auto" }}>
+                        <thead>
+                            <tr>
+                                <th>Descryption</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>From Date</td>
+                                <td>{from}</td>
+                            </tr>
+                            <tr>
+                                <td>To Date</td>
+                                <td>{to}</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>Total Worked Time</td>
+                                <td>{time}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Total Advance Taken</td>
+                                <td>{adv}</td>
+                            </tr>
+
+                            <tr>
+                                <td>To Be Paid</td>
+                                <td>
+                                    {pay}
+                                </td>
+                            </tr>
+                        </tbody>
+
+
+
+                    </table>
+
+                    <button type="button" disabled={!pay} className="btn btn-warning my-4" style={{ width: "150px", margin: "auto" }}>Make Payment</button>
                 </div>
+
             </div>
 
         </>

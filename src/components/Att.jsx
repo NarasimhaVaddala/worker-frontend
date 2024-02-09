@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState  } from 'react'
+import {  useParams, } from 'react-router-dom'
 
 export default function Att(props) {
    
-    let loc = useLocation()
-    let id = loc.pathname.slice(16, loc.pathname.length).toLowerCase()
+
+    let {id }= useParams()
     let name = ""
     let mobile = ""
-   
+    let disable = false
+    
 
 
 props.worker.filter((e) => {
         if (e._id === id) {
             name = e.name;
             mobile = e.mobile;
-       
-}})
+  }})
+
+props.attendance.forEach((e)=>{
+    if(e.date===props.date){
+        disable = true
+    }
+})
 
 
 
@@ -33,25 +39,31 @@ useEffect(()=>{
         if (adv==null ||adv== "") {
             alert("please Enter Advance")
         }
-         if (time==null || time=="" || time==0){
+         else if (time==null || time=="" || time==0){
         time = 0
+      }else{
+        let x = confirm("Attendance Once Marked Cannot Be Edited, If You wish to Mark attendance Click OK , Otherwise Click cancel")
+        if (x) {
+            props.takeattendance(id, time, adv)
+            props.getattendance(id)
+    
+            settime("")
+            setadv("")
+        }
+       
       }
-        props.takeattendance(id, time, adv)
-        props.getattendance(id)
-
-        settime("")
-        setadv("")
+        
     }
     return (
         <div className="container my-3">
             <h3 className='my-3'>Date : {props.date}</h3>
             <div className="d-flex align-items-center justify-content-between my-2 ">
-
-                <p>Half : 1/2</p>
-                <p>One : P</p>
-                <p>Full : P 1/2</p>
-                <p>Double : PP</p>
-                <p>Double + Half : PP 1/2</p>
+                <p>Absent : 0 Hours</p>
+                <p>Half : 4 Hours</p>
+                <p>One : 8 Hours</p>
+                <p>Full : 12 Hours</p>
+                <p>Double : 16 Hours</p>
+                <p>Double + Half : 20 Hours</p>
             </div>
             <table className="table bg-dark my-4" data-bs-theme="dark">
                 <thead className='border'>
@@ -79,7 +91,7 @@ useEffect(()=>{
                             </select> </td>
                         <td><input type="number" style={{ width: "70px" }} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
                         <td>
-                            <button className='btn btn-warning' type='button' onClick={() => takeAttendance(id, time, adv)}>Submit</button></td>
+                            <button className='btn btn-warning' type='button' disabled={disable} onClick={() => takeAttendance(id, time, adv)}>Submit</button></td>
                     </tr>
 
 

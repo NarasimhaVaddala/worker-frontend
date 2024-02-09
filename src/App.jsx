@@ -7,7 +7,7 @@ import Addworker from './components/Addworker'
 
 import Att from './components/Att'
 import Payment from './components/Payment'
-import Att_Pay from './Att_Pay'
+import Att_Pay from './components/Att_Pay'
 
 
 const fetchData = async (suburl, method, body) => {
@@ -99,12 +99,11 @@ export default function App() {
 
       <Routes>
         <Route path='/' element={<Home />} />
-
         <Route path='/workers' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
         <Route path='/addworker' element={<Addworker addWorker={addWorker} />} />
-        <Route path='/takeattendance/:id' element={<Att worker={worker} attendance={attendance} takeattendance={takeattendance} getattendance={getattendance} />} />
+        <Route path='/takeattendance/:id' element={<Att worker={worker} attendance={attendance} takeattendance={takeattendance} getattendance={getattendance} date={date}/>} />
         <Route path='attendance_payment' element={<Att_Pay worker={worker} attendance={attendance} getattendance={getattendance}/>} />
-        <Route path='makepayment/:id' element={<Payment worker={worker} attendance={attendance} getattendance={getattendance}/>} />
+        <Route path='makepayment/:id' element={<Payment worker={worker} attendance={attendance} getattendance={getattendance} />} />
       </Routes>
 
 

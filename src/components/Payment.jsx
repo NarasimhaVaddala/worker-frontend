@@ -45,8 +45,13 @@ export default function Payment(props) {
 
             if (x) {
                     props.setpaymentLog(name , id , mobile , pay , workedamt , adv , from , to)
+                    from = ""
+                    to = ""
+                    time = ""
+                    adv = ""
+                    pay = ""
                     
-            }
+                 }
     }
 
     return (

@@ -1,9 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Link  } from 'react-router-dom'
 export default function Att_Pay(props) {
+    
+    const [search, setsearch] = useState("")
     return (
-        <div className='container'>
+        <div className='container my-4'>
+     <div className="input-group bg-dark" data-bs-theme="dark">
+                    <span className="input-group-text">Search Worker</span>
+                    <input type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />
 
+                </div>
             <table className="table bg-dark my-4" data-bs-theme="dark">
                 <thead className='border'>
                     <tr >
@@ -17,7 +23,9 @@ export default function Att_Pay(props) {
                     </tr>
                 </thead>
                 <tbody >
-                    {props.worker.map((e) => {
+                    {props.worker.filter((e) => {
+                            return search.toLowerCase() === '' ? e : e.name.toLowerCase().includes(search) || e.mobile.toLowerCase().includes(search) || e.designation.toLowerCase().includes(search)
+                        }).map((e) => {
                         
                         return (
 
@@ -26,7 +34,7 @@ export default function Att_Pay(props) {
                                 <td>{e.mobile}</td>
                            
                                 <td><Link className="btn btn-dark btn-sm" to={`/takeAttendance/${e._id}`}><i className="fa-solid fa-arrow-right"></i></Link></td>
-                                <td><Link className="btn btn-dark btn-sm" to={`/makepayment/${e._id}`}><i className="fa-solid fa-arrow-right"></i></Link></td>
+                                <td> <Link className="btn btn-dark btn-sm" to={`/makepayment/${e._id}`}><i className="fa-solid fa-arrow-right"></i></Link></td>
                             </tr>
                         )
                     })

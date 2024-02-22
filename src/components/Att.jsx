@@ -9,7 +9,8 @@ export default function Att(props) {
     let mobile = ""
     let disable = false
     
-
+    const [time, settime] = useState("")
+    const [adv, setadv] = useState("")
 
 props.worker.filter((e) => {
         if (e._id === id) {
@@ -38,8 +39,7 @@ useEffect(()=>{
  
 
     
-    const [time, settime] = useState("")
-    const [adv, setadv] = useState("")
+
 
     const takeAttendance =  (id, time, adv) => {
         if (adv==null ||adv== "") {

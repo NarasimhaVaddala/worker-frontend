@@ -4,6 +4,10 @@ import { useParams } from 'react-router-dom'
 export default function Payment(props) {
 
     let {id }= useParams()
+    useEffect(() => {
+        props.getattendance(id)
+
+    }, [])
     let name = ""
     let mobile = ""
     let rate = ""
@@ -32,10 +36,7 @@ export default function Payment(props) {
     }
 
    
-    useEffect(() => {
-        props.getattendance(id)
-
-    }, [])
+ 
     let pay = (time * rate) - adv
     let workedamt = time*rate
 
@@ -112,7 +113,13 @@ export default function Payment(props) {
                             <tr>
                                 <td>To Be Paid</td>
                                 <td>
-                                    {pay}
+                                    {pay<0?0:pay}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>To Recieve</td>
+                                <td>
+                                    {pay>0?0:-pay}
                                 </td>
                             </tr>
                         </tbody>

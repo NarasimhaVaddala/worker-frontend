@@ -8,6 +8,9 @@ import Att from './components/Att'
 import Payment from './components/Payment'
 import Att_Pay from './components/Att_Pay'
 import Payment_Log from './components/Payment_Log'
+import Login from './components/Login'
+import Signup from './components/Signup'
+
 
 
 const fetchData = async (suburl, method, body) => {
@@ -133,7 +136,7 @@ export default function App() {
   }
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <Routes>
         <Route path='/' element={<Home />} />
@@ -143,6 +146,9 @@ export default function App() {
         <Route path='/attendance_payment' element={<Att_Pay worker={worker} attendance={attendance} getattendance={getattendance}/>} />
         <Route path='/makepayment/:id' element={<Payment worker={worker} attendance={attendance} getattendance={getattendance}  setpaymentLog={setpaymentLog}  />} />
         <Route path='/paymentlog' element={<Payment_Log  paymentlog={paymentlog} />} />
+
+        <Route path='/login' element={<Login/>} />
+        <Route path='/signup' element={<Signup/>} />
       </Routes>
 
 

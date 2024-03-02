@@ -103,6 +103,8 @@ export default function WorkersList(props) {
                                         <option value="mastry">Mastry</option>
                                         <option value="helper">Helper</option>
                                         <option value="driver">Driver</option>
+                                        <option value="driver">Cleaner</option>
+                                        <option value="driver">Others</option>
                                     </select>
                                 </div>
 

@@ -41,6 +41,8 @@ export default function Att_Pay(props) {
                     }
                 </tbody>
             </table>
+            
+            <h3 className='text-center my-5'>{props.worker.length==0|| props.worker.length==""?"Go to home and Add a New Worker To Proceed":""} </h3> 
         </div>
 
 

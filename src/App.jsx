@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './components/Home'
 import WorkersList from './components/WorkersList'
@@ -11,12 +11,25 @@ import Payment_Log from './components/Payment_Log'
 import Login from './components/Login'
 import Signup from './components/Signup'
 
+let token = localStorage.getItem('auth-token')
+let adminname = localStorage.getItem('adminname')
+const fetchAuth = async(suburl , body)=>{
+    const data = await fetch(`http://localhost:3000/api/auth/${suburl}`,{
+      headers:{
+        "Content-type": "application/json",
+      },
+      method:"POST",
+      body:JSON.stringify(body)
+    }) 
 
+    const res = await data.json();
+    return res;
+}
 
 const fetchData = async (suburl, method, body) => {
   const data = await fetch(`http://localhost:3000/api/worker/${suburl}`, {
     headers: {
-      "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+      "auth-token": token,
       "Content-type": "application/json",
     },
     method: method,
@@ -44,15 +57,61 @@ export default function App() {
   const [worker, setworker] = useState([])
   const [attendance, setattendance] = useState([])
   const [paymentlog , setpaymentlog] = useState([])
-
+  const [login , setlogin] = useState(false)
+  
+  const signup = async(name, email , mobile , password)=>{
+    const data = await fetchAuth('signup' , {name , email ,  mobile , password})
+    if (!data.success) {
+      if (data.error=="User already exists") {
+        alert("User Already Exists , Please Login");
+      }
+      else{
+        alert("some error occured Please try again after sometime")
+      }
+    }
+  
+    if (data.success) {
+        localStorage.setItem('auth-token' , data.token) 
+        localStorage.setItem('adminname',data.name)
+        location.href = "/"
+    }
+  }
+  
+  const log_in = async(mobile , password)=>{
+    const data = await fetchAuth('login' , {mobile , password})
+    if (!data.success) {
+      if (data.error=="You Donot Have Account Please Sign Up") {
+        let x = confirm("You Dont have an account! Do you want to create one")
+        if (x) {
+          location.href="/signup"
+        }
+      }
+  
+      if (data.error=="Please Enter correct details") {
+        alert("Mobile or Password is Wrong")
+      }
+  
+    }
+  
+    if (data.success) {
+      localStorage.setItem('auth-token' , data.token)
+      localStorage.setItem('adminname',data.name)
+      location.href = "/" 
+    
+    }
+  }
+  
   const getWorkers = async () => {
     const res = await fetchData("fetchallworkers", "GET")
     setworker(res.workerlist)
+    
   }
 
   useEffect(() => { 
-    getWorkers() 
-    getpaymentLog()},
+    islogin()
+    getWorkers()
+    getpaymentLog()
+  },
   [])
 
 
@@ -103,7 +162,7 @@ export default function App() {
   const getpaymentLog = async()=>{
     const res = await fetch(`http://localhost:3000/api/payment/paymenthistory` , {
       headers: {
-        "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+        "auth-token": token,
         "Content-type": "application/json",
       },
       method: "GET",
@@ -119,7 +178,7 @@ export default function App() {
     const log = {name:name , id:id , mobile:mobile , date:date , paidamount:paidamount , workedamount:workedamount , advance:advance , fromdate:fromdate , todate:todate}
     const res = await fetch(`http://localhost:3000/api/payment/paymentlog` , {
       headers: {
-        "auth-token": "eyJhbGciOiJIUzI1NiJ9.NjViNWE1MzFmMDgyZTc0YTQzY2FiNDFk.ZmWinjmICqS6K_n3EOymuAvCxa3oBdxCd_SYeT0DhYU",
+        "auth-token": token,
         "Content-type": "application/json",
       },
       method: "POST",
@@ -134,21 +193,33 @@ export default function App() {
     }
     getpaymentLog()
   }
+
+  const islogin=()=>{
+    let token = localStorage.getItem('auth-token')
+    if (!token) {
+      setlogin(false)
+    }
+    else{
+      setlogin(true)
+    }
+  }
+  
+
   return (
     <>
-      {/* <Header /> */}
+    {login && <Header adminname={adminname}/>}
 
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/workers' element={<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />} />
-        <Route path='/addworker' element={<Addworker addWorker={addWorker} />} />
-        <Route path='/takeattendance/:id' element={<Att worker={worker} paymentlog={paymentlog} attendance={attendance} takeattendance={takeattendance} getattendance={getattendance} date={date}/>} />
-        <Route path='/attendance_payment' element={<Att_Pay worker={worker} attendance={attendance} getattendance={getattendance}/>} />
-        <Route path='/makepayment/:id' element={<Payment worker={worker} attendance={attendance} getattendance={getattendance}  setpaymentLog={setpaymentLog}  />} />
-        <Route path='/paymentlog' element={<Payment_Log  paymentlog={paymentlog} />} />
+        <Route path='/' element={login?<Home />:<Login log_in={log_in}/>} />
+        <Route path='/workers' element={login?<WorkersList worker={worker} delete={deleteWorker} editWorker={editWorker} />:<Login log_in={log_in}/>} />
+        <Route path='/addworker' element={login?<Addworker addWorker={addWorker} />:<Login log_in={log_in}/>} />
+        <Route path='/takeattendance/:id' element={login?<Att worker={worker} paymentlog={paymentlog} attendance={attendance} takeattendance={takeattendance} getattendance={getattendance} date={date}/>:<Login log_in={log_in}/>} />
+        <Route path='/attendance_payment' element={login?<Att_Pay worker={worker} attendance={attendance} getattendance={getattendance}/>:<Login log_in={log_in}/>} />
+        <Route path='/makepayment/:id' element={login?<Payment worker={worker} attendance={attendance} getattendance={getattendance}  setpaymentLog={setpaymentLog}  />:<Login log_in={log_in}/>} />
+        <Route path='/paymentlog' element={login?<Payment_Log  paymentlog={paymentlog} />:<Login log_in={log_in}/>} />
 
-        <Route path='/login' element={<Login/>} />
-        <Route path='/signup' element={<Signup/>} />
+        <Route path='/login' element={<Login log_in={log_in}/>} />
+        <Route path='/signup' element={<Signup signup={signup}/>} />
       </Routes>
 
 

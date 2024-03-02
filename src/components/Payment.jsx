@@ -51,7 +51,7 @@ export default function Payment(props) {
                     time = ""
                     adv = ""
                     pay = ""
-                    
+                    location.href = '/paymentlog'
                  }
     }
 
@@ -78,6 +78,8 @@ export default function Payment(props) {
                         </tr>
                     </tbody>
                 </table>
+
+                
                 <div className="container d-flex flex-column">
 
 

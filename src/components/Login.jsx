@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Login() {
+export default function Login(props) {
+  const [user , setuser] = useState({mobile:"" , password:""})
+  const logins=()=>{
+    if (user.mobile.length < 10 || user.mobile.length > 10 || user.password=="") {
+      alert("Enter Valid Details")
+    }
+    else{
+
+      props.log_in(user.mobile , user.password)
+      console.log(user);
+    }
+  }
   return (
     
       <section className="vh-100" >
@@ -27,17 +38,17 @@ export default function Login() {
                   <h5 className="fw-normal mb-3 pb-3" style={{letterSpacing: "1px" , color:"white"}}>Sign into your account</h5>
 
                   <div className="form-outline mb-4">
-                    <input type="email" id="form2Example17" className="form-control form-control-lg" />
-                    <label className="form-label text-white" htmlFor="form2Example17">Email address</label>
+                    <label className="form-label text-white" htmlFor="mobile">Mobile</label>
+                    <input onChange={(e)=>{setuser({...user , mobile:e.target.value});console.log(user);}} type="text" id="mobile" className="form-control form-control-lg" />
                   </div>
 
                   <div className="form-outline mb-4">
-                    <input type="password" id="form2Example27" className="form-control form-control-lg" />
-                    <label className="form-label text-white" htmlFor="form2Example27">Password</label>
+                    <label className="form-label text-white" htmlFor="password">Password</label>
+                    <input onChange={(e)=>{setuser({...user , password:e.target.value})}} type="password" id="password" className="form-control form-control-lg" />
                   </div>
 
                   <div className="pt-1 mb-4">
-                    <button className="btn btn-light btn-lg btn-block" type="button">Login</button>
+                    <button onClick={logins} className="btn btn-light btn-lg btn-block" type="button">Login</button>
                   </div>
 
                   <a className="small text-muted" href="#!">Forgot password?</a>

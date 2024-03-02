@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Signup() {
+export default function Signup(props) {
+  const [user , setuser] = useState({name:"", email:"", mobile:"" , password:""})
+  
+const signup = ()=>{
+  if (user.name=="" || user.email=="" || user.mobile=="" || user.password=="") {
+    alert("Please enter valid details")
+    
+  }else{
+
+    props.signup(user.name , user.email , user.mobile , user.password)
+  }
+}
   return (
     
     <section className="vh-100" >
@@ -27,22 +38,27 @@ export default function Signup() {
                     <h5 className="fw-normal mb-2 pb-2" style={{letterSpacing: "1px" , color:"white"}}>Sign Up for New Account</h5>
   
                     <div className="form-outline mb-3">
-                      <input type="email" id="form2Example17" className="form-control form-control-lg" />
-                      <label className="form-label text-white" htmlFor="form2Example17">Email address</label>
+                      <label className="form-label text-white" htmlFor="name">Name</label>
+                      <input type="text" id="name" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , name:e.target.value})  }}/>
                     </div>
   
                     <div className="form-outline mb-3">
-                      <input type="text" id="form2Example27" className="form-control form-control-lg" />
-                      <label className="form-label text-white" htmlFor="form2Example27">Mobile</label>
+                      <label className="form-label text-white" htmlFor="email">Email address</label>
+                      <input type="email" id="email" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , email:e.target.value})}}/>
+                    </div>
+  
+                    <div className="form-outline mb-3">
+                      <label className="form-label text-white" htmlFor="mobile">Mobile</label>
+                      <input type="text" id="mobile" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , mobile:e.target.value})}}/>
                     </div>
 
                     <div className="form-outline mb-3">
-                      <input type="password" id="form2Example27" className="form-control form-control-lg" />
-                      <label className="form-label text-white" htmlFor="form2Example27">Password</label>
+                      <label className="form-label text-white" htmlFor="pass">Password</label>
+                      <input type="password" id="pass" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , password:e.target.value})}}/>
                     </div>
   
                     <div className="pt-1 mb-3">
-                      <button className="btn btn-light btn-lg btn-block" type="button">Login</button>
+                      <button className="btn btn-light btn-lg btn-block" type="button" onClick={signup}>Login</button>
                     </div>
   
                     <a className="small text-muted" href="#!">Forgot password?</a>

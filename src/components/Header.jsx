@@ -1,14 +1,17 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 export default function Header(props) {
+  const navigate = useNavigate()
   let loc = useLocation()
+
+  
   const logout = () => {
     let x = confirm("Are You sure want to logout ?")
     if (x) {
-      localStorage.setItem('auth-token' , JSON.stringify(null))
-      localStorage.setItem('adminname' , JSON.stringify(null))
-      location.href = '/login'
+      localStorage.removeItem('auth-token' )
+      localStorage.removeItem('adminname' )
+      location.href = "/login"
     }else{
       console.log("his");
     }

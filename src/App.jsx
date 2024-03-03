@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './components/Home'
 import WorkersList from './components/WorkersList'
@@ -40,6 +40,13 @@ const fetchData = async (suburl, method, body) => {
   return res;
 }
 
+
+
+
+// RFC START HERE
+
+
+
 export default function App() {
   let date = ""
   const setdate = () => {
@@ -73,6 +80,7 @@ export default function App() {
     if (data.success) {
         localStorage.setItem('auth-token' , data.token) 
         localStorage.setItem('adminname',data.name)
+       
         location.href = "/"
     }
   }
@@ -83,7 +91,7 @@ export default function App() {
       if (data.error=="You Donot Have Account Please Sign Up") {
         let x = confirm("You Dont have an account! Do you want to create one")
         if (x) {
-          location.href="/signup"
+          location.href = "/signup"
         }
       }
   
@@ -96,7 +104,7 @@ export default function App() {
     if (data.success) {
       localStorage.setItem('auth-token' , data.token)
       localStorage.setItem('adminname',data.name)
-      location.href = "/" 
+      location.href = "/"
     
     }
   }
@@ -112,7 +120,7 @@ export default function App() {
     getWorkers()
     getpaymentLog()
   },
-  [])
+  [login])
 
 
   const addWorker = async (name, mobile, designation, rate) => {
@@ -196,7 +204,7 @@ export default function App() {
 
   const islogin=()=>{
     let token = localStorage.getItem('auth-token')
-    if (!token) {
+    if (!token||token=="null"||token=="") {
       setlogin(false)
     }
     else{

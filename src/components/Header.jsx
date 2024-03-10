@@ -1,17 +1,18 @@
-import React from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import React , {useContext} from 'react'
+import { Link, useLocation , useNavigate } from 'react-router-dom'
+import context from '../Context/context'
 
 export default function Header(props) {
-  const navigate = useNavigate()
   let loc = useLocation()
-
-  
+  const navigate = useNavigate()
+  const value = useContext(context)
   const logout = () => {
     let x = confirm("Are You sure want to logout ?")
     if (x) {
       localStorage.removeItem('auth-token' )
       localStorage.removeItem('adminname' )
-      location.href = "/login"
+      value.islogin()
+      navigate("/login")
     }else{
       console.log("his");
     }

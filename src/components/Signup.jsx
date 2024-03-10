@@ -1,18 +1,46 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState  , useContext} from 'react'
+import { Link ,useNavigate} from 'react-router-dom'
+import context from '../Context/context'
 
 export default function Signup(props) {
+  const value = useContext(context)
+  const navigate = useNavigate()
   const [user , setuser] = useState({name:"", email:"", mobile:"" , password:""})
-  
-const signup = ()=>{
-  if (user.name=="" || user.email=="" || user.mobile=="" || user.password=="") {
-    alert("Please enter valid details")
-    
-  }else{
 
-    props.signup(user.name , user.email , user.mobile , user.password)
-  }
+  const signup = async () => 
+  {
+    if (user.name=="" || user.email=="" || user.mobile=="" || user.password=="") 
+    {
+              alert("Please enter valid details")
+    }
+    else
+    {
+            const data = await value.fetchAuth('signup', { name:user.name, email:user.email, mobile:user.mobile, password:user.password })
+            if (!data.success) 
+            {
+                        if (data.error == "User already exists") 
+                        {
+                                value.setlogin(false)
+                                alert("User Already Exists , Please Login");
+                        }
+                        else 
+                        {
+                                alert("some error occured Please try again after sometime")
+                        }
+            }
+
+            if (data.success) 
+            {
+                      localStorage.setItem('auth-token', data.token)
+                      localStorage.setItem('adminname', data.name)
+                      value.setlogin(true)
+                      navigate('/')
+            }
+    }
+
 }
+
+
   return (
     
     <section className="vh-100" >
@@ -58,7 +86,7 @@ const signup = ()=>{
                     </div>
   
                     <div className="pt-1 mb-3">
-                      <button className="btn btn-light btn-lg btn-block" type="button" onClick={signup}>Login</button>
+                      <button className="btn btn-light btn-lg btn-block" type="button" onClick={signup}>Register</button>
                     </div>
   
                     <a className="small text-muted" href="#!">Forgot password?</a>

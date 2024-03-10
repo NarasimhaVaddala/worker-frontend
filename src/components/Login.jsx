@@ -1,21 +1,59 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState , useContext} from 'react'
+import { Link , useNavigate} from 'react-router-dom'
+import context from '../Context/context'
 
-export default function Login(props) {
+
+
+
+export default function Login() {
+
+  const value = useContext(context)
   const [user , setuser] = useState({mobile:"" , password:""})
-  const logins=()=>{
-    if (user.mobile.length < 10 || user.mobile.length > 10 || user.password=="") {
-      alert("Enter Valid Details")
-    }
-    else{
+  const navigate = useNavigate()
 
-      props.log_in(user.mobile , user.password)
-      console.log(user);
-    }
+  const log_in = async () => 
+  {
+        if (user.mobile.length < 10 || user.mobile.length > 10 || user.password=="") 
+        {
+          alert("Enter Valid Details")
+        }
+        else
+        {
+                  const data = await value.fetchAuth('login', { mobile:user.mobile, password:user.password })
+                  if (!data.success) 
+                  {
+                                if (data.error == "You Donot Have Account Please Sign Up") 
+                                {
+                                          let x = confirm("You Dont have an account! Do you want to create one")
+                                          if (x) 
+                                          {
+                                            value.setlogin(false)
+                                            navigate('/signup')
+                                          }
+                                }
+                            
+                                if (data.error == "Please Enter correct details") 
+                                {
+                                          value.setlogin(false)
+                                          alert("Mobile or Password is Wrong")
+                                }
+                            
+                  }
+                
+                  if (data.success)
+                  {
+                                localStorage.setItem('auth-token', data.token)
+                                localStorage.setItem('adminname', data.name)
+                                value.setlogin(true)
+                                navigate('/')
+                
+                  }
+          }
   }
+ 
   return (
     
-      <section className="vh-100" >
+<section className="vh-100" >
   <div className="container py-5 h-100 text-white" data-bs-theme="dark">
     <div className="row d-flex justify-content-center align-items-center h-100">
       <div className="col col-xl-10">
@@ -48,7 +86,7 @@ export default function Login(props) {
                   </div>
 
                   <div className="pt-1 mb-4">
-                    <button onClick={logins} className="btn btn-light btn-lg btn-block" type="button">Login</button>
+                    <button onClick={log_in} className="btn btn-light btn-lg btn-block" type="button">Login</button>
                   </div>
 
                   <a className="small text-muted" href="#!">Forgot password?</a>

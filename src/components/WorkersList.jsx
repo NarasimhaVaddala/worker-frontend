@@ -1,7 +1,10 @@
-import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useRef, useState } from 'react'
+import context from '../Context/context'
+
 
 export default function WorkersList(props) {
+
+    const value = useContext(context)
 
     const ref = useRef()
     const [name, setname] = useState("")
@@ -29,7 +32,7 @@ export default function WorkersList(props) {
             <div className="container my-4 ">
                 <div className="input-group bg-dark" data-bs-theme="dark">
                     <span className="input-group-text">Search Worker</span>
-                    <input type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />
+                    <input id="search" type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />
 
                 </div>
                 <table className="table bg-dark my-4" data-bs-theme="dark">
@@ -46,7 +49,7 @@ export default function WorkersList(props) {
                         </tr>
                     </thead>
                     <tbody >
-                        {props.worker.filter((e) => {
+                        {value.worker.filter((e) => {
                             return search.toLowerCase() === '' ? e : e.name.toLowerCase().includes(search) || e.mobile.toLowerCase().includes(search) || e.designation.toLowerCase().includes(search)
                         }).map((e) => {
                             return (
@@ -56,7 +59,7 @@ export default function WorkersList(props) {
                                     <td>{e.designation}</td>
                                     <td>{e.rate}</td>
                                     <td><button className="btn btn-warning btn-sm" onClick={() => handleEdit(e.mobile, e.designation, e.rate, e.name, e._id)}><i className="fa-regular fa-pen-to-square"></i></button></td>
-                                    <td><button className="btn btn-danger btn-sm" onClick={() => props.delete(e._id)}><i className="fa-solid fa-trash-can"></i></button></td>
+                                    <td><button className="btn btn-danger btn-sm" onClick={() => value.deleteWorker(e._id)}><i className="fa-solid fa-trash-can"></i></button></td>
                                    
                              </tr>
                             )
@@ -65,7 +68,7 @@ export default function WorkersList(props) {
                     </tbody>
                 </table>
             </div>
-            <h3 className='text-center my-5'>{props.worker.length==0|| props.worker.length==""?"Go to home and Add a New Worker To Proceed":""} </h3> 
+            <h3 className='text-center my-5'>{value.worker.length==0|| value.worker.length==""?"Go to home and Add a New Worker To Proceed":""} </h3> 
 
 
 
@@ -108,7 +111,7 @@ export default function WorkersList(props) {
                                     </select>
                                 </div>
 
-                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => props.editWorker(id, name, mob, des, rate)}>Submit</button>
+                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => value.editWorker(id, name, mob, des, rate)}>Submit</button>
                             </form>
                         </div>
 

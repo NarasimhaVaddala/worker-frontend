@@ -1,13 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState , useContext} from 'react'
 import {Link  } from 'react-router-dom'
+import context from '../Context/context'
 export default function Att_Pay(props) {
     
     const [search, setsearch] = useState("")
+    const value = useContext(context)
     return (
         <div className='container my-4'>
      <div className="input-group bg-dark" data-bs-theme="dark">
                     <span className="input-group-text">Search Worker</span>
-                    <input type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />
+                    <input id="search" type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />
 
                 </div>
             <table className="table bg-dark my-4" data-bs-theme="dark">
@@ -23,7 +25,7 @@ export default function Att_Pay(props) {
                     </tr>
                 </thead>
                 <tbody >
-                    {props.worker.filter((e) => {
+                    {value.worker.filter((e) => {
                             return search.toLowerCase() === '' ? e : e.name.toLowerCase().includes(search) || e.mobile.toLowerCase().includes(search) || e.designation.toLowerCase().includes(search)
                         }).map((e) => {
                         
@@ -42,7 +44,7 @@ export default function Att_Pay(props) {
                 </tbody>
             </table>
             
-            <h3 className='text-center my-5'>{props.worker.length==0|| props.worker.length==""?"Go to home and Add a New Worker To Proceed":""} </h3> 
+            <h3 className='text-center my-5'>{value.worker.length==0|| value.worker.length==""?"Go to home and Add a New Worker To Proceed":""} </h3> 
         </div>
 
 

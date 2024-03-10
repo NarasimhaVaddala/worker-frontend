@@ -1,58 +1,50 @@
-import React, { useEffect, useState  } from 'react'
+import React, { useEffect, useState , useContext  } from 'react'
 import {  useParams, } from 'react-router-dom'
+import context from '../Context/context'
+
+
 
 export default function Att(props) {
-   
 
-    let {id }= useParams()
-    let name = ""
-    let mobile = ""
+    
+    
+    const value = useContext(context);
+    const {id}= useParams()
+    const [attendance , setattendance] = useState([])
+ 
+
+
+
+    useEffect(() => {
+        value.getattendance()
+    },[id])
+    
+    
     let disable = false
     
     const [time, settime] = useState("")
     const [adv, setadv] = useState("")
 
-props.worker.filter((e) => {
-        if (e._id === id) {
-            name = e.name;
-            mobile = e.mobile;
-  }})
+  
 
-props.attendance.filter((e)=>{
-    if(e.date===props.date){
-        disable = true
-    }
-})
-
-props.paymentlog.filter((e)=>{
-    if (e.id===id && e.todate==props.date) {
-        disable = true
-    }
-})
-
-
-
-useEffect(()=>{
-        props.getattendance(id)
-},[])
-    
- 
-
-    
-
-
-    const takeAttendance =  (id, time, adv) => {
-        if (adv==null ||adv== "") {
+    const takeAttendance =  async(id, time, adv) => {
+        if (adv==null ||adv== "") 
+        {
             alert("please Enter Advance")
         }
-         else if (time==null || time=="" || time==0){
-        time = 0
-      }else{
+        else if (time==null || time=="" || time==0)
+        {
+            time = 0
+        }
+      else{
         let x = confirm("Attendance Once Marked Cannot Be Edited, If You wish to Mark attendance Click OK , Otherwise Click cancel")
-        if (x) {
-            props.takeattendance(id, time, adv)
-            props.getattendance(id)
-    
+        if (x) 
+        {
+            
+            const res = await fetchData(`takeattendance/${id}`, "PUT", { time: parseFloat(time), advance: parseFloat(adv), date: props.date })
+            
+            
+            value.getWorkers()
             settime("")
             setadv("")
         }
@@ -60,6 +52,8 @@ useEffect(()=>{
       }
         
     }
+
+
     return (
         <div className="container my-3">
             <h3 className='my-3'>Date : {props.date}</h3>
@@ -71,7 +65,7 @@ useEffect(()=>{
                 <p>Double : 16 Hours</p>
                 <p>Double + Half : 20 Hours</p>
             </div>
-            <table className="table bg-dark my-4" data-bs-theme="dark">
+            <table className="table bg-dark my-4 " data-bs-theme="dark" >
                 <thead className='border'>
                     <tr >
                         <th scope="col">Name</th>
@@ -80,14 +74,12 @@ useEffect(()=>{
                         <th scope="col">Advance in ₹</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <tr>
-                        <td>{name}</td>
-                        <td>{mobile}</td>
+                        <td>{}</td>
+                        <td>{}</td>
                         <td>
-                            <select disabled={disable} value={time} onChange={(e) => settime(e.target.value)} >
+                            <select name='ddes' disabled={disable} value={time} onChange={(e) => settime(e.target.value)} >
                                 <option value="0">Absent</option>
                                 <option value="0.5">Half</option>
                                 <option value="1">One</option>
@@ -95,17 +87,10 @@ useEffect(()=>{
                                 <option value="2">Double</option>
                                 <option value="2.5">Double + Half</option>
                             </select> </td>
-                        <td><input type="number" style={{ width: "70px" }} disabled={disable} value={adv} onChange={(e) => setadv(e.target.value)} /></td>
-                        <td>
-                            <button className='btn btn-warning' type='button' disabled={disable} onClick={() => takeAttendance(id, time, adv)}>Submit</button></td>
+                        <td><input type="number" style={{ width: "70px" }} disabled={disable} value={adv} onChange={(e) => setadv(e.target.value)} name='nu'/></td>
+                        <td><button className='btn btn-warning' type='button' disabled={disable} onClick={()=>takeAttendance(id, time, adv)}>Submit</button></td>
                     </tr>
-
-
-
-
-                </tbody>
-
-
+                 </tbody>
             </table>
 
             <h3>Attendance</h3>
@@ -119,7 +104,7 @@ useEffect(()=>{
                 </thead>
                 <tbody>{
 
-                    props.attendance.map((e) => {
+                    value.attendance.map((e) => {
                         return (<tr key={e.advance}>
                             <td>{e.date}</td>
                             <td>{e.time}</td>

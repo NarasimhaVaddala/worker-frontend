@@ -64,7 +64,6 @@ export default function App() {
   setdate()
 
   const [worker, setworker] = useState([])
-  const [attendance, setattendance] = useState([])
   const [paymentlog, setpaymentlog] = useState([])
   const [login, setlogin] = useState(false)
 
@@ -119,19 +118,6 @@ export default function App() {
   }
 
 
-  const takeattendance = async (id, time, adv) => {
-    const res = await fetchData(`takeattendance/${id}`, "PUT", { time: parseFloat(time), advance: parseFloat(adv), date: date })
-    getattendance()
-    getWorkers()
-
-  }
-
-  const getattendance = async (id) => {
-    const result = await fetchData("getatt", "POST", { id })
-    setattendance(result.attendance)
-
-
-  }
 
 
   const getpaymentLog = async () => {
@@ -182,7 +168,7 @@ export default function App() {
 
   return (
     <>
-      <Context.Provider value={{  worker, attendance, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers, takeattendance, getattendance, setattendance }}>
+      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers }}>
         {login && <Header adminname={adminname} />}
 
         <Routes>
@@ -192,11 +178,11 @@ export default function App() {
 
           <Route path='/addworker' element={login ? <Addworker addWorker={addWorker} /> : <Login />} />
 
-          <Route path='/takeattendance/:id' element={login ? <Att attendance={attendance} takeattendance={takeattendance} getattendance={getattendance} date={date} /> : <Login />} />
+          <Route path='/takeattendance/:id' element={login ? <Att /> : <Login />} />
 
           <Route path='/attendance_payment' element={login ? <Att_Pay /> : <Login />} />
 
-          <Route path='/makepayment/:id' element={login ? <Payment worker={worker} attendance={attendance} getattendance={getattendance} setpaymentLog={setpaymentLog} /> : <Login />} />
+          <Route path='/makepayment/:id' element={login ? <Payment worker={worker} setpaymentLog={setpaymentLog} /> : <Login />} />
           <Route path='/paymentlog' element={login ? <Payment_Log paymentlog={paymentlog} /> : <Login />} />
 
           <Route path='/login' element={<Login />} />

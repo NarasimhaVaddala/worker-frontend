@@ -11,14 +11,14 @@ import Payment_Log from './components/Payment_Log'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import Context from './Context/context'
+import Forgotpassword from './components/Forgotpassword'
 
 let token = localStorage.getItem('auth-token')
 let adminname = localStorage.getItem('adminname')
 const fetchAuth = async (suburl, body) => {
-  const data = await fetch(`http://localhost:3000/api/auth/${suburl}`, {
-    headers: {
-      "Content-type": "application/json",
-    },
+  const data = await fetch(`http://localhost:3000/api/auth/${suburl}`, 
+  {
+    headers: {"Content-type": "application/json",},
     method: "POST",
     body: JSON.stringify(body)
   })
@@ -28,8 +28,10 @@ const fetchAuth = async (suburl, body) => {
 }
 
 const fetchData = async (suburl, method, body) => {
-  const data = await fetch(`http://localhost:3000/api/worker/${suburl}`, {
-    headers: {
+  const data = await fetch(`http://localhost:3000/api/worker/${suburl}`, 
+  {
+    headers: 
+    {
       "auth-token": token,
       "Content-type": "application/json",
     },
@@ -51,15 +53,16 @@ const fetchData = async (suburl, method, body) => {
 export default function App() {
   const navigate = useNavigate()
   let date = ""
-  const setdate = () => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    let mm = today.getMonth() + 1;
-    let dd = today.getDate();
 
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-    date = dd + '/' + mm + '/' + yyyy;
+  const setdate = () => 
+  {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        date = dd + '/' + mm + '/' + yyyy;
   }
   setdate()
 
@@ -69,106 +72,113 @@ export default function App() {
 
  
   
-  const getWorkers = async () => {
+  const getWorkers = async () => 
+  {
     const res = await fetchData("fetchallworkers", "GET")
     setworker(res.workerlist)
-
   }
 
-  useEffect(() => {
+  useEffect(() => 
+  {
+      token = localStorage.getItem('auth-token')
+      adminname = localStorage.getItem('adminname')
 
-    token = localStorage.getItem('auth-token')
-    adminname = localStorage.getItem('adminname')
-    if (token) {
-      islogin()
-      getWorkers()
-      getpaymentLog()
-    }
+      if (token) 
+      {
+        islogin()
+        getWorkers()
+        getpaymentLog()
+      }
+  },[login])
 
 
-  },
-    [login])
-
-
-  const addWorker = async (name, mobile, designation, rate) => {
+  const addWorker = async (name, mobile, designation, rate) => 
+  {
     const res = await fetchData("addnewworker", "POST", { name, mobile, designation, rate })
     setworker([...worker, res.worker])
     console.log(res.worker);
-
   }
 
   const deleteWorker = async (id) => {
     let x = confirm("Are You Sure Want To Delete This Worker and all of his Data!!")
-    if (x) {
-      const res = await fetchData("deleteworker", "DELETE", { id: id })
-      getWorkers()
+    if (x) 
+    {
+        const res = await fetchData("deleteworker", "DELETE", { id: id })
+        getWorkers()
     }
   }
 
 
   const editWorker = async (id, name, mobile, designation, rate) => {
-    if ((name.length < 3) || (mobile.length < 10 || mobile.length > 10) || rate.length < 1 || (designation === null || designation === "")) {
-      alert("Please Enter a Valid Details")
-    }
-    else {
-      const res = await fetchData("editworker", "PUT", { id, name, designation, mobile, rate })
-      getWorkers()
-      setworker([...worker])
-    }
+      if ((name.length < 3) || (mobile.length < 10 || mobile.length > 10) || rate.length < 1 || (designation === null || designation === "")) 
+      {
+        alert("Please Enter a Valid Details")
+      }
+      else 
+      {
+        const res = await fetchData("editworker", "PUT", { id, name, designation, mobile, rate })
+        getWorkers()
+        setworker([...worker])
+      }
   }
 
 
 
 
   const getpaymentLog = async () => {
-    const res = await fetch(`http://localhost:3000/api/payment/paymenthistory`, {
-      headers: {
-        "auth-token": token,
-        "Content-type": "application/json",
-      },
-      method: "GET",
-
+    const res = await fetch(`http://localhost:3000/api/payment/paymenthistory`,
+    {
+        headers: 
+        {
+          "auth-token": token,
+          "Content-type": "application/json",
+        },
+        method: "GET",
     })
 
-    const data = await res.json()
-    setpaymentlog(data.paymentlog)
+      const data = await res.json()
+      setpaymentlog(data.paymentlog)
   }
 
 
-  const setpaymentLog = async (name, id, mobile, paidamount, workedamount, advance, fromdate, todate) => {
+  const setpaymentLog = async (name, id, mobile, paidamount, workedamount, advance, fromdate, todate) => 
+  {
     const log = { name: name, id: id, mobile: mobile, date: date, paidamount: paidamount, workedamount: workedamount, advance: advance, fromdate: fromdate, todate: todate }
-    const res = await fetch(`http://localhost:3000/api/payment/paymentlog`, {
-      headers: {
-        "auth-token": token,
-        "Content-type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(log)
+    const res = await fetch(`http://localhost:3000/api/payment/paymentlog`, 
+    {
+        headers: 
+        {
+          "auth-token": token,
+          "Content-type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(log)
     })
     const data = await res.json()
 
-    if (data.success) {
+    if (data.success) 
+    {
       const delatt = await fetchData("deleteatt", "POST", { id })
       console.log(delatt);
-
     }
     getpaymentLog()
   }
 
   const islogin = () => {
-    let token = localStorage.getItem('auth-token')
-    if (!token || token == "null" || token == "") {
-      setlogin(false)
-    }
-    else {
-      setlogin(true)
-    }
+      let token = localStorage.getItem('auth-token')
+      if (!token || token == "null" || token == "") 
+      {
+          setlogin(false)
+      }
+      else {
+          setlogin(true)
+      }
   }
 
 
   return (
     <>
-      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers }}>
+      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData }}>
         {login && <Header adminname={adminname} />}
 
         <Routes>
@@ -188,6 +198,7 @@ export default function App() {
           <Route path='/login' element={<Login />} />
 
           <Route path='/signup' element={<Signup />} />
+          <Route path='/forgotpassword' element={<Forgotpassword/>} />
         </Routes>
       </Context.Provider>
 

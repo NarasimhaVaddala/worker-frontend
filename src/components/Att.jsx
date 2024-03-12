@@ -9,90 +9,61 @@ export default function Att(props) {
 
 
     const value = useContext(context);
-    let token = localStorage.getItem('auth-token')
     const { id } = useParams()
     const [attendance, setattendance] = useState([])
-
-    const getatt = async () => {
-        const url = "http://localhost:3000/api/worker/getatt"
-        const data = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-                "auth-token": token
-            },
-
-            body: JSON.stringify({ id: id })
-        })
-
-        const res = await data.json()
-        if (res.success) {
-            setattendance(res.attendance)
-            console.log("Res.attendance", res.attendance);
-        }
-    }
-
-    const postatt = async (time, adv) => {
-        if (adv == null || adv == "" || time == "" || time == null || time == 0) {
-            alert("Please Fill all Fields")
-        }
-        else {
-
-
-            const url = `http://localhost:3000/api/worker/takeattendance/${id}`
-            const data = await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Content-type": "application/json",
-                    "auth-token": token
-                },
-                body: JSON.stringify({ time: parseFloat(time), advance: parseFloat(adv), date: value.date })
-
-
-            })
-            const res = await data.json()
-            console.log(res.updatedattendance);
-            setattendance([...attendance , { time: parseFloat(time), advance: parseFloat(adv), date: value.date }])
-        }
-    }
-
-    
-    useEffect(() => {
-        getatt()
-    }, [])
-
-
-
-    let disable = false
-
+    const [details , setdetails] = useState([])
     const [time, settime] = useState("")
     const [adv, setadv] = useState("")
 
 
+    
 
-    const takeAttendance = async (id, time, adv) => {
-        if (adv == null || adv == "") {
-            alert("please Enter Advance")
+  
+    const postatt = async (time, adv) => {
+        if (!time) time = 0
+        if (!adv) adv = 0
+        let x = confirm("Attendance Once Marked Cannot Be Edited , Do You want to procced") 
+        if (!x) return
+        else
+        {
+            const res = await value.fetchData(`/takeattendance/${id}`, "PUT", { time: parseFloat(time), advance: parseFloat(adv), date: value.date })
+            console.log(res.updatedattendance);
+            setattendance([...attendance, { time: parseFloat(time), advance: parseFloat(adv), date: value.date }])
         }
-        else if (time == null || time == "" || time == 0) {
-            time = 0
-        }
-        else {
-            let x = confirm("Attendance Once Marked Cannot Be Edited, If You wish to Mark attendance Click OK , Otherwise Click cancel")
-            if (x) {
-                setattendance()
-                settime("")
-                setadv("")
-            }
+        
+    }
 
+    const getAttendance = async () => {
+        const res = await value.fetchData("/getatt", "POST", { id: id })
+        if (res.success) {
+            setattendance(res.attendance)
+            setdetails(res.details)
+            console.log("Res.attendance", res.attendance);
         }
+    }
 
+
+    useEffect(() => {
+        getAttendance()
+    }, [])
+
+
+  
+
+
+    let disable = false
+
+    if (attendance.length!=0 ) {
+        
+        if (value.date == attendance[attendance.length - 1].date) {
+            disable = true   
+        }
     }
 
 
     return (
         <div className="container my-3">
-            <h3 className='my-3'>Date : {props.date}</h3>
+            <h3 className='my-3'>Date : {value.date}</h3>
             <div className="d-flex align-items-center justify-content-between my-2 ">
                 <p>Absent : 0 Hours</p>
                 <p>Half : 4 Hours</p>
@@ -112,8 +83,8 @@ export default function Att(props) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{ }</td>
-                        <td>{ }</td>
+                        <td>{ details.name}</td>
+                        <td>{ details.mobile}</td>
                         <td>
                             <select name='ddes' disabled={disable} value={time} onChange={(e) => settime(e.target.value)} >
                                 <option value="0">Absent</option>
@@ -124,7 +95,7 @@ export default function Att(props) {
                                 <option value="2.5">Double + Half</option>
                             </select> </td>
                         <td><input type="number" style={{ width: "70px" }} disabled={disable} value={adv} onChange={(e) => setadv(e.target.value)} name='nu' /></td>
-                        <td><button className='btn btn-warning' type='button' disabled={disable} onClick={() => postatt( time, adv)}>Submit</button></td>
+                        <td><button className='btn btn-warning' type='button' disabled={disable} onClick={() => postatt(time, adv)}>Submit</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -150,11 +121,7 @@ export default function Att(props) {
 
                 }</tbody>
             </table>
-
-
-
-
-        </div>
+     </div>
 
 
 

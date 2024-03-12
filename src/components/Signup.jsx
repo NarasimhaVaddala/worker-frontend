@@ -89,7 +89,7 @@ export default function Signup(props) {
                       <button className="btn btn-light btn-lg btn-block" type="button" onClick={signup}>Register</button>
                     </div>
   
-                    <a className="small text-muted" href="#!">Forgot password?</a>
+                    <Link className="small text-muted" to="/forgotpassword">Forgot password?</Link>
                     <p className="mb-3 pb-lg-2 text-white" >Already have an account?
                      <Link to="/login"
                         style={{color: "#393f81"}}> Login</Link></p>

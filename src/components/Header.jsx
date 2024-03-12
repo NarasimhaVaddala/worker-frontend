@@ -6,15 +6,19 @@ export default function Header(props) {
   let loc = useLocation()
   const navigate = useNavigate()
   const value = useContext(context)
-  const logout = () => {
+  const logout = () => 
+  {
     let x = confirm("Are You sure want to logout ?")
-    if (x) {
+    if (x) 
+    {
       localStorage.removeItem('auth-token' )
       localStorage.removeItem('adminname' )
       value.islogin()
       navigate("/login")
-    }else{
-      console.log("his");
+    }
+    else
+    {
+      console.log("");
     }
     
   }

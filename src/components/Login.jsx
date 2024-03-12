@@ -89,8 +89,8 @@ export default function Login() {
                     <button onClick={log_in} className="btn btn-light btn-lg btn-block" type="button">Login</button>
                   </div>
 
-                  <a className="small text-muted" href="#!">Forgot password?</a>
-                  <p className="mb-5 pb-lg-2 text-white" >Don't have an account?
+                  <Link className="small text-muted" to="/forgotpassword">Forgot password?</Link>
+                    <p className="mb-5 pb-lg-2 text-white" >Don't have an account?
                    <Link to="/signup"
                       style={{color: "#393f81"}}> Register here</Link></p>
                 </form>

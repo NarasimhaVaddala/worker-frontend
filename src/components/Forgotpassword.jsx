@@ -18,7 +18,7 @@ export default function Forgotpassword() {
         }
         else 
         {
-                const data = await fetch(`http://localhost:3000/api/auth/forgotpassword`, 
+                const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/forgotpassword`, 
                 {
                     headers: {"Content-type": "application/json",},
                     method: "POST",
@@ -42,7 +42,7 @@ export default function Forgotpassword() {
         }
         else 
         {
-            const data = await fetch(`http://localhost:3000/api/auth/verifyotp`, 
+            const data = await fetch(`hhttps://worker-backend-y30n.onrender.com/api/auth/verifyotp`, 
             {
                 headers: {"Content-type": "application/json"},
                 method: "POST",

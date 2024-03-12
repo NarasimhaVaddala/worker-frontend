@@ -14,7 +14,9 @@ export default function Signup(props) {
 
   const forgotpass = async (email) => {
 
-    const data = await fetch(`http://localhost:3000/api/auth/justemail`,
+    // https://worker-backend-y30n.onrender.com
+
+    const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/justemail`,
       {
         headers: { "Content-type": "application/json", },
         method: "POST",
@@ -36,7 +38,7 @@ export default function Signup(props) {
       alert("Enter Otp and Email")
     }
     else {
-      const data = await fetch(`http://localhost:3000/api/auth/justverify`,
+      const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/justverify`,
         {
           headers: { "Content-type": "application/json" },
           method: "POST",

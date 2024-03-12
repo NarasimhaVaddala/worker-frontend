@@ -18,7 +18,7 @@ import Alert from './components/Alert'
 let token = localStorage.getItem('auth-token')
 let adminname = localStorage.getItem('adminname')
 const fetchAuth = async (suburl, body) => {
-  const data = await fetch(`http://localhost:3000/api/auth/${suburl}`, 
+  const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/${suburl}`, 
   {
     headers: {"Content-type": "application/json",},
     method: "POST",
@@ -30,7 +30,7 @@ const fetchAuth = async (suburl, body) => {
 }
 
 const fetchData = async (suburl, method, body) => {
-  const data = await fetch(`http://localhost:3000/api/worker/${suburl}`, 
+  const data = await fetch(`https://worker-backend-y30n.onrender.com/api/worker/${suburl}`, 
   {
     headers: 
     {
@@ -129,7 +129,7 @@ export default function App() {
 
 
   const getpaymentLog = async () => {
-    const res = await fetch(`http://localhost:3000/api/payment/paymenthistory`,
+    const res = await fetch(`https://worker-backend-y30n.onrender.com/api/payment/paymenthistory`,
     {
         headers: 
         {
@@ -147,7 +147,7 @@ export default function App() {
   const setpaymentLog = async (name, id, mobile, paidamount, workedamount, advance, fromdate, todate) => 
   {
     const log = { name: name, id: id, mobile: mobile, date: date, paidamount: paidamount, workedamount: workedamount, advance: advance, fromdate: fromdate, todate: todate }
-    const res = await fetch(`http://localhost:3000/api/payment/paymentlog`, 
+    const res = await fetch(`https://worker-backend-y30n.onrender.com/api/payment/paymentlog`, 
     {
         headers: 
         {

@@ -9,6 +9,8 @@ export default function Login() {
 
   const value = useContext(context)
   const [user , setuser] = useState({mobile:"" , password:""})
+  
+  const [pastype, setpastype] = useState("password")
   const navigate = useNavigate()
 
   const log_in = async () => 
@@ -35,7 +37,7 @@ export default function Login() {
                                 if (data.error == "Please Enter correct details") 
                                 {
                                           value.setlogin(false)
-                                          alert("Mobile or Password is Wrong")
+                                          value.showAlert("danger" ,"Mobile or Password is Wrong")
                                 }
                             
                   }
@@ -45,6 +47,7 @@ export default function Login() {
                                 localStorage.setItem('auth-token', data.token)
                                 localStorage.setItem('adminname', data.name)
                                 value.setlogin(true)
+                                value.showAlert("success" , "Login Successful");
                                 navigate('/')
                 
                   }
@@ -80,9 +83,11 @@ export default function Login() {
                     <input onChange={(e)=>{setuser({...user , mobile:e.target.value});console.log(user);}} type="text" id="mobile" className="form-control form-control-lg" />
                   </div>
 
-                  <div className="form-outline mb-4">
                     <label className="form-label text-white" htmlFor="password">Password</label>
-                    <input onChange={(e)=>{setuser({...user , password:e.target.value})}} type="password" id="password" className="form-control form-control-lg" />
+                  <div className="form-outline d-flex mb-4">
+                    <input onChange={(e)=>{setuser({...user , password:e.target.value})}} type={pastype} id="password" className="form-control form-control-lg" />
+                    <button onClick={() => { pastype == "password" ? setpastype("text") : setpastype("password") }} className="btn btn-dark mx-2" type='button'>{pastype == "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}</button>
+                    
                   </div>
 
                   <div className="pt-1 mb-4">

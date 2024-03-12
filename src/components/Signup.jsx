@@ -6,12 +6,14 @@ export default function Signup(props) {
   const value = useContext(context)
   const navigate = useNavigate()
   const [user , setuser] = useState({name:"", email:"", mobile:"" , password:""})
+  
+  const [pastype, setpastype] = useState("password")
 
   const signup = async () => 
   {
     if (user.name=="" || user.email=="" || user.mobile=="" || user.password=="") 
     {
-              alert("Please enter valid details")
+       value.showAlert("warning" , "Please enter valid details")
     }
     else
     {
@@ -21,11 +23,13 @@ export default function Signup(props) {
                         if (data.error == "User already exists") 
                         {
                                 value.setlogin(false)
-                                alert("User Already Exists , Please Login");
+                                value.showAlert("warning" , "User Already Exists , Please Login");
+
                         }
                         else 
                         {
-                                alert("some error occured Please try again after sometime")
+                                value.setlogin(false)
+                                value.showAlert("danger","some error occured Please try again after sometime")
                         }
             }
 
@@ -34,6 +38,7 @@ export default function Signup(props) {
                       localStorage.setItem('auth-token', data.token)
                       localStorage.setItem('adminname', data.name)
                       value.setlogin(true)
+                      value.showAlert("success" , "Login Successful");
                       navigate('/')
             }
     }
@@ -80,9 +85,10 @@ export default function Signup(props) {
                       <input type="text" id="mobile" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , mobile:e.target.value})}}/>
                     </div>
 
-                    <div className="form-outline mb-3">
                       <label className="form-label text-white" htmlFor="pass">Password</label>
-                      <input type="password" id="pass" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , password:e.target.value})}}/>
+                    <div className="form-outline d-flex mb-3">
+                      <input type={pastype} id="pass" className="form-control form-control-lg" onChange={(e)=>{setuser({...user , password:e.target.value})}}/>
+                      <button onClick={() => { pastype == "password" ? setpastype("text") : setpastype("password") }} className="btn btn-dark mx-2" type='button'>{pastype == "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}</button>
                     </div>
   
                     <div className="pt-1 mb-3">

@@ -12,6 +12,8 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Context from './Context/context'
 import Forgotpassword from './components/Forgotpassword'
+import FloatingButton from './components/FloatingButton'
+import Alert from './components/Alert'
 
 let token = localStorage.getItem('auth-token')
 let adminname = localStorage.getItem('adminname')
@@ -69,6 +71,7 @@ export default function App() {
   const [worker, setworker] = useState([])
   const [paymentlog, setpaymentlog] = useState([])
   const [login, setlogin] = useState(false)
+  const [alert , setalert] = useState(null)
 
  
   
@@ -175,13 +178,21 @@ export default function App() {
       }
   }
 
-
+  const showAlert = (type , message)=>{
+    setalert({type , message})
+    setTimeout(() => {
+      setalert(null)
+    }, 1500);
+  }
   return (
     <>
-      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData }}>
+      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData , showAlert }}>
         {login && <Header adminname={adminname} />}
 
-        <Routes>
+        <Alert alert={alert}/>
+
+
+        <Routes >
           <Route path='/' element={login ? <Home /> : <Login />} />
 
           <Route path='/workers' element={login ? <WorkersList /> : <Login />} />
@@ -201,6 +212,7 @@ export default function App() {
           <Route path='/forgotpassword' element={<Forgotpassword/>} />
         </Routes>
       </Context.Provider>
+      {login && <FloatingButton/>}
 
 
     </>

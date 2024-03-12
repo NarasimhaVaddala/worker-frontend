@@ -83,12 +83,24 @@ export default function Login() {
                     <input onChange={(e)=>{setuser({...user , mobile:e.target.value});console.log(user);}} type="text" id="mobile" className="form-control form-control-lg" />
                   </div>
 
-                    <label className="form-label text-white" htmlFor="password">Password</label>
-                  <div className="form-outline d-flex mb-4">
-                    <input onChange={(e)=>{setuser({...user , password:e.target.value})}} type={pastype} id="password" className="form-control form-control-lg" />
-                    <button onClick={() => { pastype == "password" ? setpastype("text") : setpastype("password") }} className="btn btn-dark mx-2" type='button'>{pastype == "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}</button>
-                    
-                  </div>
+                  <label className="form-label text-white" htmlFor="password">Password</label>
+<div className="form-outline d-flex mb-4" style={{ position: 'relative' }}>
+    <input 
+        onChange={(e) => { setuser({ ...user, password: e.target.value }) }} 
+        type={pastype} 
+        id="password" 
+        className="form-control form-control-lg" 
+    />
+    <button 
+        onClick={() => { pastype === "password" ? setpastype("text") : setpastype("password") }} 
+        className="btn btn-dark mx-2" 
+        type='button' 
+        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+    >
+        {pastype === "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}
+    </button>
+</div>
+
 
                   <div className="pt-1 mb-4">
                     <button onClick={log_in} className="btn btn-light btn-lg btn-block" type="button">Login</button>

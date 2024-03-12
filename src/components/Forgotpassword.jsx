@@ -75,7 +75,7 @@ export default function Forgotpassword() {
                         <div className="card" style={{ borderRadius: "1rem" }}>
                             <div className="row g-0">
                                 <div className="col-md-6 col-lg-5 d-none d-md-block">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                                    <img src="https://images.pexels.com/photos/6347901/pexels-photo-6347901.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                         alt="login form" className="img-fluid" style={{ borderRadius: "1rem 0 0 1rem" }} />
                                 </div>
                                 <div className="col-md-6 col-lg-7 d-flex align-items-center">
@@ -107,12 +107,23 @@ export default function Forgotpassword() {
                                                 </div>
 
 
-
-                                                <label className="form-label text-white" htmlFor="password">Enter New Password</label>
-                                                <div className="d-flex mb-4">
-                                                    <input type={pastype} id="password" className="form-control form-control-lg" onChange={(e) => setpassword(e.target.value)} />
-                                                    <button onClick={() => { pastype == "password" ? setpastype("text") : setpastype("password") }} className="btn btn-dark mx-2" type='button'>{pastype == "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}</button>
-                                                </div>
+                                                <label className="form-label text-white" htmlFor="password">Password</label>
+                      <div className="form-outline d-flex mb-4" style={{ position: 'relative' }}>
+                        <input
+                          onChange={(e) => { setpassword(e.target.value) }}
+                          type={pastype}
+                          id="password"
+                          className="form-control form-control-lg"
+                        />
+                        <button
+                          onClick={() => { pastype === "password" ? setpastype("text") : setpastype("password") }}
+                          className="btn btn-dark mx-2"
+                          type='button'
+                          style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                        >
+                          {pastype === "password" ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}
+                        </button>
+                      </div>
 
 
                                                 <button className="btn btn-light btn-lg btn-block" type='button' onClick={verifyOtp}>Change password</button>

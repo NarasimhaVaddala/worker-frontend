@@ -49,7 +49,7 @@ return (
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="rate" className="form-label text-white">Rate</label>
+                                <label htmlFor="rate" className="form-label text-white">Rate per 8 Hours</label>
                                 <input type="number" min={1} max={10} className="form-control" id="rate" maxLength={10} value={newWorker.rate} onChange={(e) => setNewWorker({...newWorker ,rate:e.target.value})} />
                             </div>
 

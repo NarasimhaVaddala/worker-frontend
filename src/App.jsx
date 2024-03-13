@@ -14,6 +14,7 @@ import Context from './Context/context'
 import Forgotpassword from './components/Forgotpassword'
 import FloatingButton from './components/FloatingButton'
 import Alert from './components/Alert'
+import Spinner from './components/Spinner'
 
 let token = localStorage.getItem('auth-token')
 let adminname = localStorage.getItem('adminname')
@@ -72,6 +73,7 @@ export default function App() {
   const [paymentlog, setpaymentlog] = useState([])
   const [login, setlogin] = useState(false)
   const [alert , setalert] = useState(null)
+  const [loading , setloading] = useState(false)
 
  
   
@@ -97,16 +99,20 @@ export default function App() {
 
   const addWorker = async (name, mobile, designation, rate) => 
   {
+    setloading(true)
     const res = await fetchData("addnewworker", "POST", { name, mobile, designation, rate })
     setworker([...worker, res.worker])
-    console.log(res.worker);
+    setloading(false)
+    // console.log(res.worker);
   }
 
   const deleteWorker = async (id) => {
     let x = confirm("Are You Sure Want To Delete This Worker and all of his Data!!")
     if (x) 
     {
+        setloading(true)
         const res = await fetchData("deleteworker", "DELETE", { id: id })
+        setloading(false)
         getWorkers()
     }
   }
@@ -119,7 +125,9 @@ export default function App() {
       }
       else 
       {
+        setloading(true)
         const res = await fetchData("editworker", "PUT", { id, name, designation, mobile, rate })
+        setloading(false)
         getWorkers()
         setworker([...worker])
       }
@@ -129,6 +137,7 @@ export default function App() {
 
 
   const getpaymentLog = async () => {
+    setloading(true)
     const res = await fetch(`https://worker-backend-y30n.onrender.com/api/payment/paymenthistory`,
     {
         headers: 
@@ -141,12 +150,14 @@ export default function App() {
 
       const data = await res.json()
       setpaymentlog(data.paymentlog)
+      setloading(false)
   }
 
 
   const setpaymentLog = async (name, id, mobile, paidamount, workedamount, advance, fromdate, todate) => 
   {
     const log = { name: name, id: id, mobile: mobile, date: date, paidamount: paidamount, workedamount: workedamount, advance: advance, fromdate: fromdate, todate: todate }
+    setloading(true)
     const res = await fetch(`https://worker-backend-y30n.onrender.com/api/payment/paymentlog`, 
     {
         headers: 
@@ -158,7 +169,7 @@ export default function App() {
         body: JSON.stringify(log)
     })
     const data = await res.json()
-
+    setloading(false)
     if (data.success) 
     {
       const delatt = await fetchData("deleteatt", "POST", { id })
@@ -186,13 +197,16 @@ export default function App() {
   }
   return (
     <>
-      <Context.Provider value={{ date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData , showAlert }}>
+      <Context.Provider value={{ loading , setloading , date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData , showAlert }}>
         {login && <Header adminname={adminname} />}
 
         <Alert alert={alert}/>
 
+        {
+          loading && <Spinner/>
+        }
 
-        <Routes >
+       <Routes >
           <Route path='/' element={login ? <Home /> : <Login />} />
 
           <Route path='/workers' element={login ? <WorkersList /> : <Login />} />
@@ -204,13 +218,18 @@ export default function App() {
           <Route path='/attendance_payment' element={login ? <Att_Pay /> : <Login />} />
 
           <Route path='/makepayment/:id' element={login ? <Payment worker={worker} setpaymentLog={setpaymentLog} /> : <Login />} />
+
           <Route path='/paymentlog' element={login ? <Payment_Log paymentlog={paymentlog} /> : <Login />} />
 
           <Route path='/login' element={<Login />} />
+          
 
           <Route path='/signup' element={<Signup />} />
           <Route path='/forgotpassword' element={<Forgotpassword/>} />
+
         </Routes>
+
+
       </Context.Provider>
       {login && <FloatingButton/>}
 

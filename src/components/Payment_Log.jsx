@@ -8,9 +8,9 @@ export default function Payment_Log(props) {
         <div className='container my-2'>
             <h5 className='my-3'>{props.paymentlog.length?"Note : If Paid amount showing Negative , It Means You have Recieved the amount":""}</h5>
             <h2 className='text-center my-5'>{!props.paymentlog.length?"Nothing to See Here":""} </h2> 
-            {props.paymentlog.map((e)=>{
+            {props.paymentlog.map((e , index)=>{
                 
-                    return (<div key={e.date} className="card bg-dark my-2" data-bs-theme="dark">
+                    return (<div key={index} className="card bg-dark my-2" data-bs-theme="dark">
                             <div className="card-header d-flex justify-content-between">
                                 <span>{e.name} | {e.mobile}</span>
                             <   span>Trxn date : {e.date}</span>

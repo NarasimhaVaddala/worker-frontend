@@ -20,8 +20,9 @@ export default function Login() {
           alert("Enter Valid Details")
         }
         else
-        {
+        {          value.setloading(true)
                   const data = await value.fetchAuth('login', { mobile:user.mobile, password:user.password })
+                  value.setloading(false)
                   if (!data.success) 
                   {
                                 if (data.error == "You Donot Have Account Please Sign Up") 
@@ -80,7 +81,7 @@ export default function Login() {
 
                   <div className="form-outline mb-4">
                     <label className="form-label text-white" htmlFor="mobile">Mobile</label>
-                    <input onChange={(e)=>{setuser({...user , mobile:e.target.value});console.log(user);}} type="text" id="mobile" className="form-control form-control-lg" />
+                    <input onChange={(e)=>{setuser({...user , mobile:e.target.value})}} type="text" id="mobile" className="form-control form-control-lg" />
                   </div>
 
                   <label className="form-label text-white" htmlFor="password">Password</label>

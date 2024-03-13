@@ -14,8 +14,7 @@ export default function Signup(props) {
 
   const forgotpass = async (email) => {
 
-    // https://worker-backend-y30n.onrender.com
-
+    value.setloading(true)
     const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/justemail`,
       {
         headers: { "Content-type": "application/json", },
@@ -24,7 +23,7 @@ export default function Signup(props) {
       })
 
     const res = await data.json();
-    console.log(res);
+    value.setloading(false)
     if (res.success) {
       setOpenOtp(true)
     }
@@ -38,6 +37,7 @@ export default function Signup(props) {
       alert("Enter Otp and Email")
     }
     else {
+      value.setloading(false)
       const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/justverify`,
         {
           headers: { "Content-type": "application/json" },
@@ -45,6 +45,7 @@ export default function Signup(props) {
           body: JSON.stringify({ email: email, otp: otp })
         })
       const res = await data.json()
+      value.setloading(false)
 
 
       return res;
@@ -59,9 +60,9 @@ export default function Signup(props) {
       value.showAlert("warning", "Please enter valid details")
     }
     else {
-
+      value.setloading(true)
       let otpsend = await forgotpass(user.email)
-
+      value.setloading(false)
       if (!otpsend.success) {
         if (otpsend.error == "email already exists") {
           value.showAlert("warning", "Email already exists please login")
@@ -83,8 +84,9 @@ export default function Signup(props) {
 
 
   const signup = async()=>{
+   
     let otpverify = await verifyOtp(user.email, otp)
-
+ 
       if (!otpverify.success) 
       {
         value.showAlert("danger", "Please enter valid Otp")
@@ -92,7 +94,9 @@ export default function Signup(props) {
       }
 
       if (otpverify.success) {
+        
         const data = await value.fetchAuth('signup', { name: user.name, email: user.email, mobile: user.mobile, password: user.password })
+        
         if (!data.success) {
           if (data.error == "User already exists") {
             value.setlogin(false)
@@ -178,7 +182,7 @@ export default function Signup(props) {
 
 
                       {openOtp && <><div className="form-outline mb-3">
-                        <label className="form-label text-white" htmlFor="otp">Mobile</label>
+                        <label className="form-label text-white" htmlFor="otp">Otp</label>
                         <input type="number" id="otp" className="form-control form-control-lg" onChange={(e) => { setotp(e.target.value) }} />
                       </div>
 

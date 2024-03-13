@@ -26,19 +26,21 @@ export default function Att(props) {
         if (!x) return
         else
         {
+            value.setloading(true)
             const res = await value.fetchData(`/takeattendance/${id}`, "PUT", { time: parseFloat(time), advance: parseFloat(adv), date: value.date })
-            console.log(res.updatedattendance);
+            value.setloading(false)
             setattendance([...attendance, { time: parseFloat(time), advance: parseFloat(adv), date: value.date }])
         }
         
     }
 
     const getAttendance = async () => {
-        const res = await value.fetchData("/getatt", "POST", { id: id })
+        value.setloading(true)
+        const res = await value.fetchData("getatt", "POST", { id: id })
+        value.setloading(false)
         if (res.success) {
             setattendance(res.attendance)
             setdetails(res.details)
-            console.log("Res.attendance", res.attendance);
         }
     }
 
@@ -112,7 +114,7 @@ export default function Att(props) {
                 <tbody>{
 
                     attendance.map((e) => {
-                        return (<tr key={e.advance}>
+                        return (<tr key={e.date}>
                             <td>{e.date}</td>
                             <td>{e.time}</td>
                             <td>{e.advance}</td>

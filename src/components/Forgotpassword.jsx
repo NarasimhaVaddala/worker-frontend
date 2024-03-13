@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import context from '../Context/context'
 
 export default function Forgotpassword() {
 
@@ -8,6 +9,7 @@ export default function Forgotpassword() {
     const [otp, setOtp] = useState(0)
     const [password, setpassword] = useState("")
     const [pastype, setpastype] = useState("password")
+    const value = useContext(context)
 
     const navigate = useNavigate()
     const forgotpass = async () => 
@@ -18,6 +20,7 @@ export default function Forgotpassword() {
         }
         else 
         {
+                value.setloading(true)
                 const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/forgotpassword`, 
                 {
                     headers: {"Content-type": "application/json",},
@@ -26,7 +29,8 @@ export default function Forgotpassword() {
                 })
 
                 const res = await data.json();
-                console.log(res);
+                value.setloading(false)
+                
                 if (res.success) 
                 {
                     setOpenOtp(true)
@@ -42,17 +46,18 @@ export default function Forgotpassword() {
         }
         else 
         {
-            const data = await fetch(`hhttps://worker-backend-y30n.onrender.com/api/auth/verifyotp`, 
+            value.setloading(true)
+            const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/verifyotp`, 
             {
                 headers: {"Content-type": "application/json"},
                 method: "POST",
                 body: JSON.stringify({ email: mail, otp: otp, password: password })
             })
             const res = await data.json()
-            console.log(res);
+            value.setloading(false)
             if (res.success) 
             {
-                alert('Password Changed Successfully')
+                value.showAlert("primary" ,'Password Changed Successfully')
                 navigate('/login')
             }
 

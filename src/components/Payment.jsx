@@ -11,11 +11,12 @@ export default function Payment(props) {
     const [attendance, setattendance] = useState([])
 
     const getAttendance = async () => {
+        value.setloading(true)
         const res = await value.fetchData("/getatt", "POST", { id: id })
+        value.setloading(false)
         if (res.success) {
             setattendance(res.attendance)
             setdetails(res.details)
-            console.log("Res.attendance", res.attendance);
         }
     }
 useEffect(()=>{

@@ -182,7 +182,7 @@ export default function Signup(props) {
 
 
                       {openOtp && <><div className="form-outline mb-3">
-                        <label className="form-label text-white" htmlFor="otp">Mobile</label>
+                        <label className="form-label text-white" htmlFor="otp">Otp</label>
                         <input type="number" id="otp" className="form-control form-control-lg" onChange={(e) => { setotp(e.target.value) }} />
                       </div>
 

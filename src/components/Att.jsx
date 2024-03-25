@@ -30,6 +30,8 @@ export default function Att(props) {
             const res = await value.fetchData(`/takeattendance/${id}`, "PUT", { time: parseFloat(time), advance: parseFloat(adv), date: value.date })
             value.setloading(false)
             setattendance([...attendance, { time: parseFloat(time), advance: parseFloat(adv), date: value.date }])
+            settime("")
+            setadv("")
         }
         
     }
@@ -74,19 +76,26 @@ export default function Att(props) {
                 <p>Double : 16 Hours</p>
                 <p>Double + Half : 20 Hours</p>
             </div>
-            <table className="table bg-dark my-4 " data-bs-theme="dark" >
+
+            <hr />
+
+<div className="d-flex justify-content-between">
+    <p><strong>Name</strong> : {details.name}</p>
+    <p><strong>Mobile</strong> : {details.mobile}</p>
+</div>
+
+            <table className="table bg-dark my-4 " data-bs-theme="dark"  >
                 <thead className='border'>
                     <tr >
-                        <th scope="col">Name</th>
-                        <th scope="col">Mobile</th>
+                        
                         <th scope="col">Time</th>
                         <th scope="col">Advance in ₹</th>
+                        <th scope="col">Submit</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{ details.name}</td>
-                        <td>{ details.mobile}</td>
+                      
                         <td>
                             <select name='ddes' disabled={disable} value={time} onChange={(e) => settime(e.target.value)} >
                                 <option value="0">Absent</option>

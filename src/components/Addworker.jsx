@@ -26,7 +26,6 @@ const addWorker = async () =>
             props.addWorker(newWorker.name, newWorker.mob, newWorker.des, newWorker.rate)
          
             setNewWorker({name:"" , mob:"" , des:"" , rate:""})
-            value.showAlert("success" , "Worker added Successfully")
         }
 }
 

@@ -15,13 +15,16 @@ import Forgotpassword from './components/Forgotpassword'
 import FloatingButton from './components/FloatingButton'
 import Alert from './components/Alert'
 import Spinner from './components/Spinner'
+import AdminProfile from './components/AdminProfile'
+import About from './components/About'
+import ContactPage from './components/ContactPage'
 
 let token = localStorage.getItem('auth-token')
 let adminname = localStorage.getItem('adminname')
 const fetchAuth = async (suburl, body) => {
   const data = await fetch(`https://worker-backend-y30n.onrender.com/api/auth/${suburl}`, 
   {
-    headers: {"Content-type": "application/json",},
+    headers: {"Content-type": "application/json", "auth-token": token},
     method: "POST",
     body: JSON.stringify(body)
   })
@@ -94,7 +97,7 @@ export default function App() {
         getWorkers()
         getpaymentLog()
       }
-  },[login])
+  },[login ])
 
 
   const addWorker = async (name, mobile, designation, rate) => 
@@ -103,6 +106,8 @@ export default function App() {
     const res = await fetchData("addnewworker", "POST", { name, mobile, designation, rate })
     setworker([...worker, res.worker])
     setloading(false)
+    
+    showAlert("success" , "Worker added Successfully")
     // console.log(res.worker);
   }
 
@@ -114,6 +119,7 @@ export default function App() {
         const res = await fetchData("deleteworker", "DELETE", { id: id })
         setloading(false)
         getWorkers()
+        showAlert('warning' , "Worker Deleted Successfully")
     }
   }
 
@@ -197,7 +203,7 @@ export default function App() {
   }
   return (
     <>
-      <Context.Provider value={{ loading , setloading , date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData , showAlert }}>
+      <Context.Provider value={{loading , setloading , date, worker, paymentlog,fetchAuth ,islogin,  editWorker, deleteWorker, login , setlogin, getWorkers , fetchData , showAlert }}>
         {login && <Header adminname={adminname} />}
 
         <Alert alert={alert}/>
@@ -221,7 +227,11 @@ export default function App() {
 
           <Route path='/paymentlog' element={login ? <Payment_Log paymentlog={paymentlog} /> : <Login />} />
 
+          <Route path='/adminprofile' element={login ? <AdminProfile/> : <Login />} />
+
           <Route path='/login' element={<Login />} />
+          <Route path='/about' element={<About/>} />
+          <Route path='/contact' element={<ContactPage/>} />
           
 
           <Route path='/signup' element={<Signup />} />

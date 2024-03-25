@@ -110,8 +110,9 @@ export default function Signup(props) {
         }
 
         if (data.success) {
-          localStorage.setItem('auth-token', data.token)
-          localStorage.setItem('adminname', data.name)
+        localStorage.setItem('auth-token', data.token)
+        localStorage.setItem('adminname', data.name)
+        localStorage.setItem('mobile',data.mobile)
           value.setlogin(true)
           value.showAlert("success", "Login Successful");
           navigate('/')
@@ -201,6 +202,11 @@ export default function Signup(props) {
                       <p className="mb-3 pb-lg-2 text-white" >Already have an account?
                         <Link to="/login"
                           style={{ color: "#393f81" }}> Login</Link></p>
+
+<div className="pt-1">
+                        <Link to="/contact" className='btn btn-light'>Contact Us</Link>
+                        <Link to="/about" className='btn  btn-light mx-2'>About Us</Link></div>
+                    
                     </form>
 
                   </div>

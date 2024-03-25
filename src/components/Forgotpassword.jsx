@@ -61,11 +61,17 @@ export default function Forgotpassword() {
                 navigate('/login')
             }
 
-            if (!res.success) {
-                alert('Something Went wrong please try again')
+            if (!res.success ) {
+
+                if(res.error=="Otp Doesnot Match"){
+                value.showAlert('danger',"Enter Valid Otp")
+                }
+                else{
+                    value.showAlert('danger',"Something went wrong")
+                }
 
             }
-
+           
 
         }
     }

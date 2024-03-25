@@ -4,15 +4,14 @@ import { Link } from 'react-router-dom'
 export default function About() {
   return (
     <>
-    <div style={{position:"absolute" , zIndex:1 , right:"15px" ,top:"80px" }} >
 
-        <Link className='btn btn-primary mx-2' to='/contact'> HIRE ME</Link>
-        <Link className='btn btn-primary mx-2' to='/'>Try Our Procuct</Link>
-    </div>
       <div className="container mt-4">
+ 
       <div className="row">
         <div className="col">
-            <h1>Welcome to our Worker Management System!</h1>
+            <h1>Welcome to our Worker Management System!  
+        <Link className='btn btn-primary mx-2' to='/contact'> HIRE ME</Link>
+        <Link className='btn btn-primary mx-2' to='/'>Try Our Procuct</Link></h1>
           <h3>About the Project:</h3>
           <p>
             Myself Narasimha , I am excited to showcase my project, a comprehensive Worker Management System developed using the MERN stack (MongoDB, Express.js, React, Node.js). This project represents my passion for creating innovative solutions and my proficiency in full-stack web development.

@@ -29,7 +29,7 @@ export default function WorkersList(props) {
 
     return (
         <>
-            <div className="container my-4 ">
+            <div className="container my-4 table-responsive">
                 <div className="input-group bg-dark" data-bs-theme="dark">
                     <span className="input-group-text">Search Worker</span>
                     <input id="search" type="text" aria-label="First name" className="form-control" onChange={(e) => setsearch(e.target.value)} />

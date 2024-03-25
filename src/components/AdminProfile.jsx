@@ -12,7 +12,9 @@ export default function AdminProfile(props) {
     const [user , setuser] = useState({name:localStorage.getItem('adminname') , mobile:localStorage.getItem('mobile')})
 
     const submitdetails = async()=>{
+        value.setloading(true)
         const data = await value.fetchAuth('editdetails' , {name:user.name , mobile:user.mobile})
+        value.setloading(false)
         if (data.success) {
                     
                     setdissable(true)

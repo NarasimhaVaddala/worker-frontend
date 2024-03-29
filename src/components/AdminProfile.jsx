@@ -48,7 +48,7 @@ export default function AdminProfile(props) {
                     <input type="text" value={user.mobile} className="form-control" id="exampleInputPassword1" disabled={disable} onChange={(e)=>setuser({...user , mobile:e.target.value})}/>
                 </div>
                 
-                <button type='button' className='btn btn-light mx-2' onClick={()=>{setdissable(disable==true?false:true) }}>Edit Details <i className="fa-regular fa-pen-to-square" ></i></button>
+                <button type='button' className='btn btn-light mx-2' onClick={()=>{setdissable(disable==true?false:true) }}>{disable==true?"Edit Details":"Stop Editing"} <i className="fa-regular fa-pen-to-square" ></i></button>
                 <button type='button' className='btn btn-success' disabled={disable} onClick={submitdetails}>Submit</button>
             </form>
         </div>

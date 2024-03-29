@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import './float.css'
 import { Link } from 'react-router-dom';
-// import './float.js'
-// import { Link } from 'react-router-dom'
 
 export default function FloatingButton() {
 

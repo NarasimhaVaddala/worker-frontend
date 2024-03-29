@@ -108,7 +108,7 @@ export default function App() {
     setloading(false)
     
     showAlert("success" , "Worker added Successfully")
-    // console.log(res.worker);
+   
   }
 
   const deleteWorker = async (id) => {
@@ -179,7 +179,7 @@ export default function App() {
     if (data.success) 
     {
       const delatt = await fetchData("deleteatt", "POST", { id })
-      console.log(delatt);
+      
     }
     getpaymentLog()
   }
